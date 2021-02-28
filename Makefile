@@ -2,7 +2,6 @@
 
 export CXX      := g++
 export AR       := ar
-export RANLIB   := ranlib
 export CXXFLAGS := -std=c++17 -c -I../
 
 NAME            := mrt
