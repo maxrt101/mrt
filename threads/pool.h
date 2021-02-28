@@ -25,6 +25,7 @@ class ThreadPool {
 
  private:
   void ThreadWorkerFunction();
+  void Terminate();
 
  private:
   std::vector<std::thread> pool_;
