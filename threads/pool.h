@@ -13,18 +13,26 @@
 namespace mrt {
 namespace threads {
 
+/* ThreadPool class */
 class ThreadPool {
  public:
-  ThreadPool();
+  ThreadPool(int threads_num = 0);
   ~ThreadPool();
 
+  /* Adds job to the queue */
   void AddJob(Job job);
 
+  /* Waits for all jobs that had started */
   void WaitForAll();
+
+  /* Executes all jobs in queue, than waits for them to complete */
   void FinishAll();
 
  private:
+  /* Function that every thread runs */
   void ThreadWorkerFunction();
+
+  /* Common code for WaitForAll & FinishAll */
   void Terminate();
 
  private:
@@ -32,10 +40,10 @@ class ThreadPool {
   std::queue<Job> pending_jobs_;
   std::mutex queue_mutex_;
   std::condition_variable cv_;
-  std::atomic<bool> terminate_ = false;
-  std::atomic<bool> finish_ = false;
+  std::atomic<bool> terminate_ = false; // true, when WaitForAll is called
+  std::atomic<bool> finish_ = false;    // true, when FinishAll is called
   bool stopped = false;
-  const int threads_num_ = std::thread::hardware_concurrency();
+  int threads_num_ = std::thread::hardware_concurrency();
 };
 
 } // namespace threads

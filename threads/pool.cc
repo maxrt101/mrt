@@ -1,7 +1,8 @@
 #include "pool.h"
 
 
-mrt::threads::ThreadPool::ThreadPool() {
+mrt::threads::ThreadPool::ThreadPool(int threads_num) {
+  if (threads_num) threads_num_ = threads_num;
   for (int i = 0; i < threads_num_; i++) {
     pool_.push_back(std::thread(&ThreadPool::ThreadWorkerFunction, this));
   }
