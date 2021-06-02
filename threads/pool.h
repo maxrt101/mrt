@@ -1,5 +1,5 @@
-#ifndef THREAD_POOL_THREAD_POOL_H_
-#define THREAD_POOL_THREAD_POOL_H_
+#ifndef MRT_THREADS_THREAD_POOL_H_
+#define MRT_THREADS_THREAD_POOL_H_ 1
 
 #include <queue>
 #include <mutex>

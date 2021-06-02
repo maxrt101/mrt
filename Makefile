@@ -2,11 +2,12 @@
 
 export CXX      := g++
 export AR       := ar
-export CXXFLAGS := -std=c++17 -c -I../
+export CFLAGS   := -c -I./
+export CXXFLAGS :=  $(CFLAGS) -std=c++17
 
 NAME            := mrt
 LIBNAME         := lib$(NAME).a
-OBJS            := $(addsuffix .o, $(basename $(wildcard */*.cc)))
+OBJS            := args/args.o threads/job.o threads/pool.o
 
 .PHONY: all
 
