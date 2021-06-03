@@ -7,7 +7,7 @@ export CXXFLAGS :=  $(CFLAGS) -std=c++17
 
 NAME            := mrt
 LIBNAME         := lib$(NAME).a
-OBJS            := args/args.o threads/job.o threads/pool.o
+OBJS            := args/args.o threads/job.o threads/pool.o strutils.o
 
 .PHONY: all
 
