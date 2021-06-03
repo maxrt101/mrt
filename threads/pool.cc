@@ -23,12 +23,12 @@ void mrt::threads::ThreadPool::AddJob(threads::Job job) {
 }
 
 void mrt::threads::ThreadPool::WaitForAll() {
-  terminate_.store(true);
+  finish_.store(true);
   Terminate();
 }
 
 void mrt::threads::ThreadPool::FinishAll() {
-  finish_.store(true);
+  terminate_.store(true);
   Terminate();
 }
 
