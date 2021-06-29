@@ -6,7 +6,7 @@
 namespace mrt {
 namespace str {
 
-bool EndsWith(const std::string& str, const std::string& ending);
+bool endsWith(const std::string& str, const std::string& ending);
 
 } // namespace str
 } // namespace mrt

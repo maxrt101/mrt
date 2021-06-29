@@ -20,30 +20,30 @@ class ThreadPool {
   ~ThreadPool();
 
   /* Adds job to the queue */
-  void AddJob(Job job);
+  void addJob(Job job);
 
   /* Waits for all jobs that had started */
-  void WaitForAll();
+  void waitForAll();
 
   /* Executes all jobs in queue, than waits for them to complete */
-  void FinishAll();
+  void finishAll();
 
  private:
   /* Function that every thread runs */
-  void ThreadWorkerFunction();
+  void threadWorkerFunction();
 
   /* Common code for WaitForAll & FinishAll */
-  void Terminate();
+  void terminate();
 
  private:
-  std::vector<std::thread> pool_;
-  std::queue<Job> pending_jobs_;
-  std::mutex queue_mutex_;
-  std::condition_variable cv_;
-  std::atomic<bool> terminate_ = false; // true, when WaitForAll is called
-  std::atomic<bool> finish_ = false;    // true, when FinishAll is called
-  bool stopped = false;
-  int threads_num_ = std::thread::hardware_concurrency();
+  std::vector<std::thread> m_pool;
+  std::queue<Job> m_pending_jobs;
+  std::mutex m_queue_mutex;
+  std::condition_variable m_cv;
+  std::atomic<bool> m_terminate = false; // true, when WaitForAll is called
+  std::atomic<bool> m_finish = false;    // true, when FinishAll is called
+  bool m_stopped = false;
+  int m_threads_num = std::thread::hardware_concurrency();
 };
 
 } // namespace threads

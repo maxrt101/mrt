@@ -16,35 +16,35 @@ enum class OptionType {
   kWithValue,
 };
 
-class Option {
- public:
+struct Option {
   std::string name;
   OptionType type;
   std::vector<std::string> options;
   std::string help_string;
   bool optional = true;
- 
- public:
+
   Option(const std::string& name, OptionType type,
          const std::vector<std::string>& options,
          const std::string& help_string, bool optional = true);
 };
 
 class ParserResult {
- friend class Parser;
- public:
+  friend class Parser;
+
+public:
   using callback_type = std::function<void(const std::vector<std::string>&)>;
 
- private:
-  std::map<std::string, std::vector<std::string>> parsed_;  // Stores parsed options
-  std::vector<std::string> free_params_;                    // Stores parsed unregistered parameters
-
  public:
-  bool Exists(const std::string& option_name) const;
-  void IfExists(const std::string& option_name, callback_type cb) const;
-  const std::vector<std::string>& Get(const std::string& option_name) const;
-  bool HasFreeParams() const;
-  std::vector<std::string>& GetFreeParams();
+  bool exists(const std::string& option_name) const;
+  void ifExists(const std::string& option_name, callback_type cb) const;
+  const std::vector<std::string>& get(const std::string& option_name) const;
+  bool hasFreeParams() const;
+  std::vector<std::string>& getFreeParams();
+ 
+ private:
+  std::map<std::string, std::vector<std::string>> m_parsed;  // Stores parsed options
+  std::vector<std::string> m_free_params;                    // Stores parsed unregistered parameters
+
 };
 
 class Parser {
@@ -52,13 +52,13 @@ class Parser {
   Parser(const std::string& help_string);
   Parser(const std::string& help_string, const std::initializer_list<Option>& il);
 
-  void AddOption(const Option& option);
+  void addOption(const Option& option);
 
-  ParserResult Parse(int argc, const char ** argv);
+  ParserResult parse(int argc, const char ** argv);
 
  private:
-  std::string help_string_;
-  std::vector<Option> options_;                             // Stores registered options
+  std::string m_help_string;
+  std::vector<Option> m_options;                             // Stores registered options
 };
 
 } // namespace args

@@ -16,7 +16,8 @@ struct Job {
 
   Job();
   Job(JobFunction function, void* arg);
-  void Run();
+
+  void run();
 };
 
 } // namespace threads

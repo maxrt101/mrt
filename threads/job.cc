@@ -8,7 +8,7 @@ mrt::threads::Job::Job() {}
 mrt::threads::Job::Job(JobFunction function, void* arg) 
     : function(function), arg(arg) {}
 
-void mrt::threads::Job::Run() {
+void mrt::threads::Job::run() {
   function(arg);
 }
 

@@ -10,24 +10,24 @@ class Optional {
   using function_type = std::function<void(value_type&)>;
 
  private:
-  bool exists_;
-  value_type value_;
+  bool m_exists;
+  value_type m_value;
 
  public:
-  inline Optional() : exists_(false) {}
-  inline Optional(value_type value) : exists_(true), value_(value) {}
+  inline Optional() : m_exists(false) {}
+  inline Optional(value_type value) : m_exists(true), m_value(value) {}
 
-  bool Exists() { return exists_; }
-  value_type& Get() { return value_; }
+  bool exists() { return m_exists; }
+  value_type& get() { return m_value; }
 
-  void IfExists(function_type function) {
-    if (Exists()) {
-      function(Get());
+  void ifExists(function_type function) {
+    if (exists()) {
+      function(get());
     }
   }
 
-  void IfNotExists(std::function<void()> function) {
-    if (!Exists()) {
+  void ifNotExists(std::function<void()> function) {
+    if (!exists()) {
       function();
     }
   }
