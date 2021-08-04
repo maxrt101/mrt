@@ -31,5 +31,9 @@
 *.out
 *.app
 
-# Other
+# MacOS
+.DS_Store
+
+# Project Specific
+build/*
 tests/*
