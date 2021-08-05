@@ -1,41 +1,16 @@
 # mrt c++ lib
 
-export CXX      := g++
-export AR       := ar
-export CFLAGS   := -c -I./
-export CXXFLAGS :=  $(CFLAGS) -std=c++17
+export TOPDIR := $(shell pwd)
+export PREFIX ?= $(TOPDIR)/build
 
-BUILDDIR        ?= build
-LIBDIR          := $(BUILDDIR)/lib
-INCLUDEDIR      := $(BUILDDIR)/include/mrt
+.PHONY: build
 
-TARGET          := $(LIBDIR)/libmrt.a
-OBJS            := args/args.o threads/job.o threads/pool.o strutils.o
+build:
+	make -C src
 
-.PHONY: install
-
-install: compile
-	cp optional.h     $(INCLUDEDIR)
-	cp logic.h        $(INCLUDEDIR)
-	cp strutils.h     $(INCLUDEDIR)
-	cp args/args.h    $(INCLUDEDIR)
-	cp threads/job.h  $(INCLUDEDIR)/threads
-	cp threads/pool.h $(INCLUDEDIR)/threads
-
-compile: prepare $(OBJS)
-	rm -f $(TARGET)
-	$(AR) cr $(TARGET) $(OBJS)
-
-$(OBJS): %.o : %.cc
-	$(CXX) $(CXXFLAGS) $< -o $@
-
-prepare:
-	mkdir -p $(BUILDDIR)
-	mkdir -p $(LIBDIR)
-	mkdir -p $(BUILDDIR)/include
-	mkdir -p $(INCLUDEDIR)
-	mkdir -p $(INCLUDEDIR)/threads
+test:
+	make -C tests
 
 clean:
-	rm $(OBJS)
+	make -C src clean
 

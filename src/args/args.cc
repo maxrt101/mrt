@@ -1,4 +1,4 @@
-#include "args/args.h"
+#include <mrt/args/args.h>
 
 #include <cstdlib>
 #include <cstring>
@@ -6,6 +6,12 @@
 #include <iostream>
 #include <stdexcept>
 #include <algorithm>
+
+MRT_DEF_ENUM_FIELDS(mrt::args::OptionType,
+  mrt::args::OptionType::FLAG(0),
+  mrt::args::OptionType::WITH_VALUE(1),
+  mrt::args::OptionType::POSITIONAL(2)
+);
 
 mrt::args::Option::Option(const std::string& name,
                           OptionType type,
@@ -17,7 +23,7 @@ mrt::args::Option::Option(const std::string& name,
 
 
 bool mrt::args::ParserResult::exists(const std::string& option_name) const {
-  return m_parsed.find(option_name) != m_parsed.end();
+  return m_parsed_params.find(option_name) != m_parsed_params.end();
 }
 
 
@@ -29,17 +35,17 @@ void mrt::args::ParserResult::ifExists(const std::string& option_name, callback_
 
 
 const std::vector<std::string>& mrt::args::ParserResult::get(const std::string& option_name) const {
-  return m_parsed.at(option_name);
+  return m_parsed_params.at(option_name);
 }
 
 
-bool mrt::args::ParserResult::hasFreeParams() const {
-  return !m_free_params.empty();
+bool mrt::args::ParserResult::hasUnrecognizedParams() const {
+  return !m_unrecognized_params.empty();
 }
 
 
-std::vector<std::string>& mrt::args::ParserResult::getFreeParams() {
-  return m_free_params;
+std::vector<std::string>& mrt::args::ParserResult::getUnrecognizedParams() {
+  return m_unrecognized_params;
 }
 
 
@@ -49,13 +55,21 @@ mrt::args::Parser::Parser(const std::string& help_string) : m_help_string(help_s
 mrt::args::Parser::Parser(const std::string& help_string, const std::initializer_list<Option>& il)
     : m_help_string(help_string) {
   for (auto& opt : il) {
-    m_options.push_back(opt);
-  }  
+    if (opt.type == OptionType::POSITIONAL) {
+      m_positional.push_back(opt);
+    } else {
+      m_options.push_back(opt);
+    }
+  }
 }
 
 
 void mrt::args::Parser::addOption(const Option& option) {
-  m_options.push_back(option);
+  if (option.type == OptionType::POSITIONAL) {
+    m_positional.push_back(option);
+  } else {
+    m_options.push_back(option);
+  }
 }
 
 
@@ -64,9 +78,14 @@ mrt::args::ParserResult mrt::args::Parser::parse(int argc, const char ** argv) {
   for (int i = 1; i < argc; ++i) {
     if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")) {
       std::cout << m_help_string << std::endl
-                << "Usage: " << argv[0] << " [OPTIONS]\n"
-                << "Options:\n";
-      // AddOption(OptionType::kFlag, "Shows this help message", {"-h", "--help"});
+                << "Usage: " << argv[0] << " [OPTIONS] ";
+      for (auto& opt : m_options) {
+        if (opt.type == OptionType::POSITIONAL) {
+          std::cout << "[" << opt.name << "] ";
+        }
+      }
+      std::cout << "\nOptions:\n";
+      addOption({"help", OptionType::FLAG, {"-h", "--help"}, "Shows this help message",});
       int max_option_length = 0;
       std::vector<std::pair<std::string, std::string>> m_optionsto_print;
 
@@ -89,25 +108,27 @@ mrt::args::ParserResult mrt::args::Parser::parse(int argc, const char ** argv) {
       }
       exit(EXIT_SUCCESS);
     } else {
-      
       auto it = std::find_if(m_options.begin(), m_options.end(),
-          [&](auto& option) {
-            return std::find(option.options.begin(), option.options.end(), argv[i]) != option.options.end();
-          });
-      if (it != m_options.end()) {
+        [&](auto& option) {
+          return std::find(option.options.begin(), option.options.end(), argv[i]) != option.options.end();
+        });
+      if (it != m_options.end()) { // FLAG & WITH_VALUE
         Option& option = *it;
 
-        if (option.type == OptionType::kFlag) {
-          result.m_parsed[option.name].push_back("");
-        } else if (option.type == OptionType::kWithValue) {
+        if (option.type == OptionType::FLAG) {
+          result.m_parsed_params[option.name].push_back("");
+        } else if (option.type == OptionType::WITH_VALUE) {
           if (i+1 >= argc) {
-            std::cerr << "Error: Expected argument\n";
-            exit(EXIT_FAILURE);
+            throw std::invalid_argument("No value supplied for option '" + option.name + "'");
+          } else {
+            result.m_parsed_params[option.name].push_back(argv[++i]);
           }
-          result.m_parsed[option.name].push_back(argv[++i]);
         }
-      } else {
-        result.m_free_params.push_back(argv[i]);
+      } else if (result.m_positional_params.size() <= m_positional.size()) { // POSITIONAL
+        Option& option = m_positional[result.m_positional_params.size()];
+        result.m_positional_params[option.name] = argv[i];
+      } else { // Unrecognized parameters end up here
+        result.m_unrecognized_params.push_back(argv[i]);
       }
     }
   }

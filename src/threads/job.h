@@ -1,5 +1,5 @@
-#ifndef MRT_THREADS_JOB_H_
-#define MRT_THREADS_JOB_H_ 1
+#ifndef _MRT_THREADS_JOB_H_
+#define _MRT_THREADS_JOB_H_ 1
 
 #include <functional>
 

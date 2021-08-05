@@ -1,5 +1,5 @@
-#ifndef MRT_OPTIONAL_H_
-#define MRT_OPTIONAL_H_ 1
+#ifndef _MRT_OPTIONAL_H_
+#define _MRT_OPTIONAL_H_ 1
 
 #include <functional>
 

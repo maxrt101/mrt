@@ -1,19 +1,30 @@
-#ifndef MRT_ARGS_H_
-#define MRT_ARGS_H_ 1
+#ifndef _MRT_ARGS_H_
+#define _MRT_ARGS_H_ 1
 
 #include <initializer_list>
 #include <functional>
+#include <stdexcept>
 #include <string>
 #include <vector>
 #include <map>
+
+#include <mrt/enum.h>
 
 namespace mrt {
 namespace args {
 
 /* Represents type of command line option */
-enum class OptionType {
-  kFlag,
-  kWithValue,
+MRT_DEF_ENUM(OptionType, FLAG, WITH_VALUE, POSITIONAL)
+ public:
+  inline OptionType(char c) {
+    switch (c) {
+      case 'F': m_value = OptionType::FLAG.m_value; break;
+      case 'V': m_value = OptionType::WITH_VALUE.m_value; break;
+      case 'P': m_value = OptionType::POSITIONAL.m_value; break;
+      default:
+        throw std::invalid_argument("Invalid option char");
+    }
+  }
 };
 
 struct Option {
@@ -38,12 +49,13 @@ public:
   bool exists(const std::string& option_name) const;
   void ifExists(const std::string& option_name, callback_type cb) const;
   const std::vector<std::string>& get(const std::string& option_name) const;
-  bool hasFreeParams() const;
-  std::vector<std::string>& getFreeParams();
+  bool hasUnrecognizedParams() const;
+  std::vector<std::string>& getUnrecognizedParams();
  
  private:
-  std::map<std::string, std::vector<std::string>> m_parsed;  // Stores parsed options
-  std::vector<std::string> m_free_params;                    // Stores parsed unregistered parameters
+  std::map<std::string, std::vector<std::string>> m_parsed_params;  // Stores parsed options
+  std::map<std::string, std::string> m_positional_params;           // Stores positional params
+  std::vector<std::string> m_unrecognized_params;                   // Stores parsed unregistered parameters
 
 };
 
@@ -59,6 +71,7 @@ class Parser {
  private:
   std::string m_help_string;
   std::vector<Option> m_options;                             // Stores registered options
+  std::vector<Option> m_positional;
 };
 
 } // namespace args

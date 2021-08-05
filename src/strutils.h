@@ -1,5 +1,5 @@
-#ifndef MRT_STRUTILS_H_
-#define MRT_STRUTILS_H_ 1
+#ifndef _MRT_STRUTILS_H_
+#define _MRT_STRUTILS_H_ 1
 
 #include <string>
 

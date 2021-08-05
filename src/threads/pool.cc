@@ -1,5 +1,4 @@
-#include "pool.h"
-
+#include <mrt/threads/pool.h>
 
 mrt::threads::ThreadPool::ThreadPool(int threads_num) {
   if (threads_num) m_threads_num = threads_num;
