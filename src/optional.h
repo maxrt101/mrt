@@ -39,6 +39,13 @@ class Optional {
     }
     return *this;
   }
+
+  inline T returnOrElse(T else_value) {
+    if (exists()) {
+      return m_value;
+    }
+    return else_value;
+  }
 };
 
 } /* namespace mrt */

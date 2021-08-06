@@ -29,6 +29,9 @@ int main(int argc, char ** argv) {
     std::cout << "ifNotExists lambda called" << std::endl;
   });
 
+  std::cout << "returnOrElse: " << mrt::Optional<int>(5).returnOrElse(10) << std::endl;
+  std::cout << "returnOrElse: " << mrt::Optional<int>().returnOrElse(10) << std::endl;
+
   return 0;
 } 
 
