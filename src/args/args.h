@@ -32,11 +32,11 @@ struct Option {
   OptionType type;
   std::vector<std::string> options;
   std::string help_string;
-  bool optional = true;
+  bool many = false; // for POSITIONAL type
 
   Option(const std::string& name, OptionType type,
          const std::vector<std::string>& options,
-         const std::string& help_string, bool optional = true);
+         const std::string& help_string, bool many = false);
 };
 
 class ParserResult {
@@ -53,9 +53,9 @@ public:
   std::vector<std::string>& getUnrecognizedParams();
  
  private:
-  std::map<std::string, std::vector<std::string>> m_parsed_params;  // Stores parsed options
-  std::map<std::string, std::string> m_positional_params;           // Stores positional params
-  std::vector<std::string> m_unrecognized_params;                   // Stores parsed unregistered parameters
+  int m_positional_count = 0;
+  std::map<std::string, std::vector<std::string>> m_parsed; // Stores parsed options
+  std::vector<std::string> m_unrecognized_params;           // Stores parsed unregistered parameters
 };
 
 class Parser {

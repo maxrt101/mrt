@@ -6,7 +6,9 @@
 int main(int argc, const char ** argv) {
   mrt::args::Parser argparser("mrt::args test", {
     {"version", 'F', {"-v", "--version"}, "Shows version"},
-    {"int", 'V', {"-i", "--int"}, "Passes int"}
+    {"int", 'V', {"-i", "--int"}, "Passes int"},
+    {"N", 'P', {}, "Passes int as positional"},
+    {"M", 'P', {}, "Passes ints as positional", true}
   });
 
   auto parsed = argparser.parse(argc, argv);
@@ -19,6 +21,18 @@ int main(int argc, const char ** argv) {
   parsed.ifExists("int", [](const auto& values) {
     int i = std::stoi(values[0]);
     std::cout << "i: " << i << "\n";
+  });
+
+  parsed.ifExists("N", [](const auto& values){
+    std::cout << "N: ";
+    for (auto& value : values) std::cout << value << " ";
+    std::cout << std::endl;
+  });
+  
+  parsed.ifExists("M", [](const auto& values){
+    std::cout << "M: ";
+    for (auto& value : values) std::cout << value << " ";
+    std::cout << std::endl;
   });
 
   return 0;
