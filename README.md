@@ -42,14 +42,24 @@ To build tests, run `make -C tests PREFIX=/path/to/installation/folder`
 #### Usage: Call in source file, after first argument pass `EnumName::FIELD(N),` for each of the declared enum fields.
 <br/><br/>
   
+### `bool mrt::str::startsWith(const std::string& str, const std::string& beginning)`
+#### Header: `mrt/strutils.h`
+#### Description: Checks if `str` starts with `beginning`
+<br/><br/>
+  
 ### `bool mrt::str::endsWith(const std::string& str, const std::string& ending)`
 #### Header: `mrt/strutils.h`
 #### Description: Checks if `str` ends with `ending`
 <br/><br/>
   
-### `bool mrt::hasKey(const M<K, V, C, A>& map, const K& key)`
+### `std::vector<std::string> split(const std::string& str, const std::string& delimiter = " ")`
+#### Header: `mrt/strutils.h`
+#### Description: Splits `str` into vector using `delimiter`
+<br/><br/>
+  
+### `bool mrt::hasKey(const M<T, Args...>& map, const T& key)`
 #### Header: `mrt/container_utils.h`
-#### Description: Checks if `key` is present in `map`, map being `std::map` or `std::multimap`
+#### Description: Checks if `key` is present in `map`
 <br/><br/>
   
 ### `bool mrt::isIn(T&& value, Args&&... args)`
