@@ -26,14 +26,14 @@ class Optional {
   inline value_type& operator*() { return m_value; }
   inline operator bool() { return m_exists; }
 
-  inline Optional<T>& ifExists(function_type function) {
+  inline Optional<value_type>& ifExists(function_type function) {
     if (exists()) {
       function(m_value);
     }
     return *this;
   }
 
-  inline Optional<T>& ifNotExists(std::function<void()> function) {
+  inline Optional<value_type>& ifNotExists(std::function<void()> function) {
     if (!exists()) {
       function();
     }

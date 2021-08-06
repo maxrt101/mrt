@@ -3,12 +3,14 @@
 
 #include <iostream>
 
-/* Allows for std::pair to be printed be cout */
+/* Allows for std::pair to be printed by cout */
+#ifndef MRT_DISABLE_STDPAIR_PRINTER
 template <typename T1, typename T2>
 inline std::ostream& operator<<(std::ostream& os, const std::pair<T1, T2>& pair) {
   os << "(" << pair.first << ", " << pair.second << ")";
   return os;
 }
+#endif
 
 namespace mrt {
 
