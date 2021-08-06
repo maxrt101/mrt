@@ -1,14 +1,13 @@
 # mrt
 C++ Tools  
   
-  
 # How to build:
 ```
 git clone https://github.com/maxrt101/mrt.git
 cd mrt
 make
 ```
-You can specify install folder, by calling `make PREFIX=/path/to/installation/folder`  
+You can specify install folder, by calling `make PREFIX=/path/to/installation/folder` (default `mrt/build/`)  
 To build tests, run `make -C tests PREFIX=/path/to/installation/folder`  
 <br/><br/>
   
@@ -85,7 +84,7 @@ To build tests, run `make -C tests PREFIX=/path/to/installation/folder`
  - `std::string help_string` - Help fot option
  - `bool many` - Applies to `POSITIONAL` options, means all subsequent positional arguemnts will be parsed as this option
 <br/><br/>
-
+  
 ### `class mrt::args::ParsedResult`
 #### Header: `mrt/args/args.h`
 #### Description: Holds parsed parameters
