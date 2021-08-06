@@ -56,7 +56,6 @@ public:
   std::map<std::string, std::vector<std::string>> m_parsed_params;  // Stores parsed options
   std::map<std::string, std::string> m_positional_params;           // Stores positional params
   std::vector<std::string> m_unrecognized_params;                   // Stores parsed unregistered parameters
-
 };
 
 class Parser {

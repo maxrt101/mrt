@@ -2,24 +2,32 @@
 
 #include <iostream>
 
-Optional<int> GetPositiveInt(int i) {
+mrt::Optional<int> GetPositiveInt(int i) {
   if (i < 0) {
-    return Optional<int>();
+    return mrt::Optional<int>();
   }
-  return Optional<int>(i);
+  return mrt::Optional<int>(i);
 }
 
 int main(int argc, char ** argv) {
 
-  Optional<int> opt_i = GetPositiveInt(10);
+  auto opt_i = GetPositiveInt(10);
 
-  std::cout << "GetPositiveInt(10): " << opt_i.exists() << " " << opt_i.get() << std::endl;
+  std::cout << "opt_i = GetPositiveInt(10):" << std::endl
+            << "  opt_i.exists(): " << opt_i.exists() << std::endl
+            << "  opt_i.get(): " << opt_i.get() << std::endl
+            << "  opt_i::operator bool(): " << (bool)opt_i << std::endl
+            << "  opt_i::operator *(): " << *opt_i << std::endl;
 
-  std::cout << "GetPositiveInt(1).ifExists: ";
-  GetPositiveInt(1).ifExists([](int& value) { std::cout << value << "\n"; });
+  std::cout << "ifExists: ";
+  GetPositiveInt(1).ifExists([](auto value) {
+    std::cout << "ifExists lambda called: " << value << std::endl;
+  });
   
-  std::cout << "GetPositiveInt(-1).ifNotExists: ";
-  GetPositiveInt(-1).ifNotExists([]() { std::cout << "none" << "\n";  });
+  std::cout << "ifNotExists: ";
+  GetPositiveInt(-1).ifNotExists([]() {
+    std::cout << "ifNotExists lambda called" << std::endl;
+  });
 
   return 0;
 } 

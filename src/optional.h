@@ -3,6 +3,8 @@
 
 #include <functional>
 
+namespace mrt {
+
 template <typename T>
 class Optional {
  public:
@@ -17,20 +19,28 @@ class Optional {
   inline Optional() : m_exists(false) {}
   inline Optional(value_type value) : m_exists(true), m_value(value) {}
 
-  bool exists() { return m_exists; }
-  value_type& get() { return m_value; }
+  inline bool exists() { return m_exists; }
+  inline value_type& get() { return m_value; }
 
-  void ifExists(function_type function) {
+  inline value_type* operator->() { return &m_value; }
+  inline value_type& operator*() { return m_value; }
+  inline operator bool() { return m_exists; }
+
+  inline Optional<T>& ifExists(function_type function) {
     if (exists()) {
-      function(get());
+      function(m_value);
     }
+    return *this;
   }
 
-  void ifNotExists(std::function<void()> function) {
+  inline Optional<T>& ifNotExists(std::function<void()> function) {
     if (!exists()) {
       function();
     }
+    return *this;
   }
 };
+
+} /* namespace mrt */
 
 #endif
