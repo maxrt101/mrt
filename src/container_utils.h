@@ -14,16 +14,13 @@ inline std::ostream& operator<<(std::ostream& os, const std::pair<T1, T2>& pair)
 
 namespace mrt {
 
-/* Checks if map (std::map, std::multimap) has a key
+/* Checks if map has a key
  * Template parameters:
  *  M - Map
- *  K - Key
- *  V - Value
- *  C - Compare
+ *  T - Key
  */
-template <template <typename, typename, typename, typename> typename M,
-          typename K, typename V, typename C, typename A>
-inline bool hasKey(const M<K, V, C, A>& map, const K& value) {
+template <template <class, class...> class M, class T, class ... Args>
+inline bool hasKey(const M<T, Args...>& map, const T& value) {
   return map.find(value) != map.end();
 }
 
