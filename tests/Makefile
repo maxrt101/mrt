@@ -5,7 +5,8 @@ CXX      := g++
 CXXFLAGS += -std=c++17 -I$(PREFIX)/include
 LDFLAGS  += -L$(PREFIX)/lib -lmrt
 
-SRC      := test_args.cc test_optional.cc test_container_utils.cc test_timer.cc
+SRC      := test_args.cc test_optional.cc test_container_utils.cc test_future.cc \
+            test_executor.cc test_delayed_executor.cc test_interval_executor.cc
 
 .PHONY: test
 
