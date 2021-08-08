@@ -119,31 +119,35 @@ To build tests, run `make -C tests PREFIX=/path/to/installation/folder`
   
 ## `mrt::threads` - threads utils
   
-### `typedef mrt::threads::JobFunction`
-#### Header: `mrt/threads/job.h`
-#### Description: Job function type (`void (*)(void*)`)
-<br/><br/>
-  
-### `struct mrt::threads::Job`
-#### Header: `mrt/threads/job.h`
-#### Description: Defines thread pool job
+### `class mrt::threads::Task<T>`
+#### Header: `mrt/threads/task.h`
+#### Description: Defines thread pool task. T is argument type for lambda
 #### Members:
- - `JobFunction function` - Function that the job has to execute
- - `void* arg` - Argument to pass to `function`
- - `Job()` - Default constructor
- - `Job(JobFunction function, void* arg)` - Parameterized constructor
- - `void run()` - Starts the job (runs `function(arg)`
+ - `Task()` - Default constructor
+ - `Task(F function, T arg)` - Parameterized constructor
+ - `void operator()()` - Starts the task (runs `m_function(m_arg)`
 <br/><br/>
   
-### `class mrt::threads::ThreadPool`
+### `class mrt::threads::ThreadPool<T>`
 #### Header: `mrt/threads/pool.h`
-#### Description: Thread Pool - executes a queue of Jobs
+#### Description: Thread Pool - executes a queue of Tasks. T - task type, has to have `operator()` overload
 #### Members:
  - `ThreadPool(int threads_num = 0)` - If `threads_num` is 0 - `std::thread::hardware_concurrency()` will provide number of threads
  - `~ThreadPool()`
- - `void addJob(Job job)` - Adds job to the internal queue
+ - `void addTask(T task)` - Adds job to the internal queue
  - `void waitForAll()` - Waits for all jobs that are running to complete, and then performs a cleanup
  - `void finishAll()` - Waits for all jobs in the queue to complete, and then performs a cleanup
 <br/><br/>
-
-`
+  
+### `class mrt::threads::Future<T>`
+#### Header: `mrt/threads/future.h`
+#### Description: Future class that holds T type of value
+#### Members:
+ - `Callback` - Callback type, returns void, takes `T&`
+ - `Future()` - Default constructor
+ - `bool isReady()` - Returns true if value was set
+ - `void onReady(Callback callback)` - Runs the callback, when value is ready
+ - `T get()` - Returns value, if ready, if not - blocks current thread until value is ready
+ - `void set(T&& value)` - Sets value, runs callback, unblocks waiting threads, if any
+<br/><br/>
+  
