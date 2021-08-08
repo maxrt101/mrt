@@ -117,7 +117,7 @@ To build tests, run `make -C tests PREFIX=/path/to/installation/folder`
  - `ParserResult parse(int argc, const char ** argv)` - Parser `argc` * `argv` 
 <br/><br/>
   
-## `mrt::threads` - threads utils
+## `mrt::threads` - thread patterns
   
 ### `class mrt::threads::Task<T>`
 #### Header: `mrt/threads/task.h`
@@ -149,5 +149,37 @@ To build tests, run `make -C tests PREFIX=/path/to/installation/folder`
  - `void onReady(Callback callback)` - Runs the callback, when value is ready
  - `T get()` - Returns value, if ready, if not - blocks current thread until value is ready
  - `void set(T&& value)` - Sets value, runs callback, unblocks waiting threads, if any
+<br/><br/>
+  
+### `class mrt::threads::Executor`
+#### Header: `mrt/threads/executor.h`
+#### Description: Executes function in a thread
+#### Members:
+ - `Deleter` - Deleter function type `void(*)(Executor*)`
+ - `static void DefaultDeleter(Executor* object)` - Default deleter function, joins the thread
+ - `static void DetachDeleter(Executor* object)` - Detach deleter function, detaches the thread
+ - `Executor(Deleter delter = DefaultDeleter)` - Default constructor, takes a deleter function
+ - `~Executor()` - Calls deleter function
+ - `Executor& run<ThreadFunction, Args...>(ThreadFunction&& thread_function, Args&&... args)` - Runs `thread_function` in a thread
+ - `void stop()` - Sets `m_is_running` to false and joins the underlying thread
+ - `void join()` - Joins underlying thread
+ - `void detach()` - Detaches underlying thread
+ - `void isRunning()` - Returns true if thread is running, false if thread isn't running or it's pending for termination
+<br/><br/>
+  
+### `class mrt::threads::DelayedExecutor : Executor`
+#### Header: `mrt/threads/executor.h`
+#### Description: Executes function in a thread, after a delay
+#### Members:
+ - `DelayedExecutor(Deleter deleter = DefaultDeleter)` - Calls parent constructor
+ - `DelayedExecutor& run<Duration = std::chrono::seconds, ThreadFunction, Args...>(int delay, ThreadFunction&& thread_function, Args&&... args)` - Runs `thread_function` after `delay` number of `Duration`
+<br/><br/>
+  
+### `class mrt::threads::IntervalExecutor : Executor`
+#### Header: `mrt/threads/executor.h`
+#### Description: Executes function in a thread, in a loop with interval
+#### Members:
+ - `DelayedExecutor(Deleter deleter = DefaultDeleter)` - Calls parent constructor
+ - `DelayedExecutor& run<Duration = std::chrono::seconds, ThreadFunction, Args...>(int interval, ThreadFunction&& thread_function, Args&&... args)` - Runs `thread_function` after `delay` number of `Duration` until `stop()` is called
 <br/><br/>
   
