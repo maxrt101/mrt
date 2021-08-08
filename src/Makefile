@@ -9,7 +9,7 @@ LIBDIR          := $(PREFIX)/lib
 INCLUDEDIR      := $(PREFIX)/include/mrt
 
 TARGET          := $(LIBDIR)/libmrt.a
-OBJS            := args/args.o threads/job.o threads/pool.o strutils.o
+OBJS            := args/args.o strutils.o
 
 .PHONY: build
 

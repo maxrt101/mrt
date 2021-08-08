@@ -8,36 +8,82 @@
 #include <vector>
 #include <condition_variable>
 
-#include <mrt/threads/job.h>
-
 namespace mrt {
 namespace threads {
 
-/* ThreadPool class */
+/* ThreadPool class
+ * T - task class. Required to have operator()
+ * IMPORTANT: ThreadPool needs few ms to start up
+ */
+template <class T = std::function<void(void)>>
 class ThreadPool {
  public:
-  ThreadPool(int threads_num = 0);
-  ~ThreadPool();
+  inline ThreadPool(int threads_num = 0) {
+    if (threads_num) m_threads_num = threads_num;
+    for (int i = 0; i < m_threads_num; i++) {
+      m_pool.push_back(std::thread(&ThreadPool::threadWorker, this));
+    }
+  }
 
-  /* Adds job to the queue */
-  void addJob(Job job);
+  inline ~ThreadPool() {
+    if (!m_stopped) {
+      waitForAll();
+    }
+  }
 
-  /* Waits for all jobs that had started */
-  void waitForAll();
+  /* Adds task to the queue */
+  inline void addTask(T task) {
+    {
+      std::unique_lock<std::mutex> lock(m_queue_mutex);
+      m_pending_tasks.push(task);
+    }
+    m_cv.notify_one();
+  }
 
-  /* Executes all jobs in queue, than waits for them to complete */
-  void finishAll();
+  /* Waits for all tasks that had started */
+  inline void waitForAll() {
+    m_finish.store(true);
+    terminate();
+  }
+
+  /* Executes all tasks in queue, than waits for them to complete */
+  inline void finishAll() {
+    m_terminate.store(true);
+    terminate();
+  }
 
  private:
   /* Function that every thread runs */
-  void threadWorkerFunction();
+  inline void threadWorker() {
+    while (1) {
+      T task;
+      {
+        std::unique_lock<std::mutex> lock(m_queue_mutex);
+        m_cv.wait(lock, [&]{ return !m_pending_tasks.empty() || m_terminate.load() || m_finish.load(); });
+        if (m_terminate.load()) return;
+        if (m_finish.load() && m_pending_tasks.empty()) return;
+        task = m_pending_tasks.front();
+        m_pending_tasks.pop();
+      }
+      task();
+    }
+  }
 
   /* Common code for WaitForAll & FinishAll */
-  void terminate();
+  inline void terminate() {
+    m_cv.notify_all();
+
+    for (auto &thread : m_pool) {
+      thread.join();
+    }
+
+    m_pool.clear();
+    m_stopped = true;
+  }
 
  private:
   std::vector<std::thread> m_pool;
-  std::queue<Job> m_pending_jobs;
+  std::queue<T> m_pending_tasks;
   std::mutex m_queue_mutex;
   std::condition_variable m_cv;
   std::atomic<bool> m_terminate = false; // true, when WaitForAll is called
