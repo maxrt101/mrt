@@ -106,7 +106,7 @@ mrt::args::ParserResult mrt::args::Parser::parse(int argc, const char ** argv) {
 
       for (auto& opt : m_positional) {
         max_option_length = std::max(max_option_length, (int)opt.name.size());
-        options_to_print.push_back({opt.name, opt.help_string});
+        positionals_to_print.push_back({opt.name, opt.help_string});
       }
       
       std::cout << "\nOptions:\n";
@@ -130,6 +130,11 @@ mrt::args::ParserResult mrt::args::Parser::parse(int argc, const char ** argv) {
         });
       if (it != m_options.end()) { // FLAG & WITH_VALUE
         Option& option = *it;
+
+        if (result.exists(option.name) && !option.many) {
+          std::cout << "Error: option '" << argv[i] << "' can be passed only once\n";
+          exit(EXIT_FAILURE);
+        }
 
         if (option.type == OptionType::FLAG) {
           result.m_parsed[option.name].push_back("");
