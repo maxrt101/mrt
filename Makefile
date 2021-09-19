@@ -6,6 +6,7 @@ export PREFIX ?= $(TOPDIR)/build
 .PHONY: build
 
 build:
+	$(info Building mrt)
 	make -C src
 
 test:
@@ -13,4 +14,6 @@ test:
 
 clean:
 	make -C src clean
+
+$(V).SILENT:
 
