@@ -1,5 +1,8 @@
 # mrt/tests
 
+TOPDIR   ?= ..
+PREFIX   ?= $(TOPDIR)/build
+
 CXX      := g++
 
 CXXFLAGS += -std=c++17 -I$(PREFIX)/include
@@ -12,18 +15,18 @@ SRC      := test_args.cc test_optional.cc test_container_utils.cc test_future.cc
 .PHONY: test
 
 test: build
-	for test in bin/*; do \
+	for test in $(PREFIX)/bin/*; do \
 		echo "Running $$test"; \
-		./$$test; \
+		$$test; \
 		echo; \
 	done
 
 build:
-	mkdir -p bin
+	mkdir -p $(PREFIX)/bin
 	for test in $(SRC); do \
-    if [ ! -f "bin/$${test%.*}" ]; then \
+		if [ ! -f "$(PREFIX)/bin/$${test%.*}" ]; then \
 			echo "Building $$test"; \
-			$(CXX) $(CXXFLAGS) $(LDFLAGS) $$test -o bin/$${test%.*}; \
+			$(CXX) $(CXXFLAGS) $(LDFLAGS) $$test -o $(PREFIX)/bin/$${test%.*}; \
 		fi; \
 	done
 

@@ -18,6 +18,7 @@ build: install-headers $(OBJS)
 	$(AR) cr $(TARGET) $(OBJS)
 
 $(OBJS): %.o : %.cc
+	$(info Building $@)
 	$(CXX) $(CXXFLAGS) $< -o $@
 
 install-headers: prepare

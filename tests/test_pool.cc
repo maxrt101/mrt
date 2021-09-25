@@ -8,7 +8,7 @@
 using namespace std::literals::chrono_literals;
 
 auto printer = [](int x) {
-  std::cout << x << std::endl;
+  std::cout << x;
 };
 
 int main() {
@@ -20,5 +20,6 @@ int main() {
 
   std::this_thread::sleep_for(100ms);
   pool.finishAll();
+  std::cout << std::endl;
 }
 
