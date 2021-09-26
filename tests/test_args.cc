@@ -35,6 +35,8 @@ int main(int argc, const char ** argv) {
     std::cout << std::endl;
   });
 
+  std::cout << parsed.getFirstOr("int", "default") << std::endl;
+
   return 0;
 }
 

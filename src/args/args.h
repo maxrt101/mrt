@@ -49,6 +49,11 @@ public:
   bool exists(const std::string& option_name) const;
   void ifExists(const std::string& option_name, callback_type cb) const;
   const std::vector<std::string>& get(const std::string& option_name) const;
+  const std::vector<std::string>& getOr(const std::string& option_name,
+                                        const std::vector<std::string>& default_value) const;
+  const std::string& getFirst(const std::string& option_name) const;
+  const std::string& getFirstOr(const std::string& option_name,
+                                const std::string& default_value) const;
   bool hasUnrecognizedParams() const;
   std::vector<std::string>& getUnrecognizedParams();
  

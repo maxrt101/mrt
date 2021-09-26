@@ -38,6 +38,27 @@ const std::vector<std::string>& mrt::args::ParserResult::get(const std::string& 
   return m_parsed.at(option_name);
 }
 
+const std::vector<std::string>& mrt::args::ParserResult::getOr(
+    const std::string& option_name,
+    const std::vector<std::string>& default_value) const {
+  if (exists(option_name)) {
+    return get(option_name);
+  }
+  return default_value;
+}
+
+const std::string& mrt::args::ParserResult::getFirst(const std::string& option_name) const {
+  return get(option_name)[0];
+}
+
+const std::string& mrt::args::ParserResult::getFirstOr(
+    const std::string& option_name,
+    const std::string& default_value) const {
+  if (exists(option_name)) {
+    return get(option_name)[0];
+  }
+  return default_value;
+}
 
 bool mrt::args::ParserResult::hasUnrecognizedParams() const {
   return !m_unrecognized_params.empty();
