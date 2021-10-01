@@ -26,6 +26,7 @@
    private: \
     int m_value; \
     constexpr OptionType(int value) : m_value(value) {} \
+   public:
 
 /* Defines enum's fields 
  * Should be called in source file
