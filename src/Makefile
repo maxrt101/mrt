@@ -11,6 +11,10 @@ INCLUDEDIR      := $(PREFIX)/include/mrt
 TARGET          := $(LIBDIR)/libmrt.a
 OBJS            := args/args.o strutils.o
 
+ifeq ("$(DEBUG)","1")
+CFLAGS += -g3 -DDEBUG
+endif
+
 .PHONY: build
 
 build: install-headers $(OBJS)

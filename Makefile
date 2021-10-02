@@ -7,7 +7,7 @@ export PREFIX ?= $(TOPDIR)/build
 
 build:
 	$(info Building mrt)
-	make -C src
+	make -C src DEBUG=$(DEBUG)
 
 test:
 	make -C tests

@@ -170,7 +170,7 @@ mrt::args::ParserResult mrt::args::Parser::parse(int argc, const char ** argv) {
         if (result.m_positional_count < m_positional.size()) { // POSITIONAL
           Option& option = m_positional[result.m_positional_count++];
           result.m_parsed[option.name].push_back(argv[i]);
-        } else if (m_positional.back().many) {
+        } else if (m_positional.size() && m_positional.back().many) {
           Option& option = m_positional.back();
           result.m_parsed[option.name].push_back(argv[i]);
         } else { // Unrecognized parameters end up here
