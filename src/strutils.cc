@@ -1,6 +1,6 @@
 #include "strutils.h"
 
-bool startsWith(const std::string& str, const std::string& beginning) {
+bool mrt::str::startsWith(const std::string& str, const std::string& beginning) {
   return str.rfind(beginning, 0) == 0;
 }
 

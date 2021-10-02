@@ -9,7 +9,7 @@ LIBDIR          := $(PREFIX)/lib
 INCLUDEDIR      := $(PREFIX)/include/mrt
 
 TARGET          := $(LIBDIR)/libmrt.a
-OBJS            := args/args.o strutils.o
+OBJS            := args/args.o test/test.o test/framework.o strutils.o
 
 ifeq ("$(DEBUG)","1")
 CFLAGS += -g3 -DDEBUG
@@ -28,6 +28,7 @@ $(OBJS): %.o : %.cc
 install-headers: prepare
 	cp *.h         $(INCLUDEDIR)
 	cp args/*.h    $(INCLUDEDIR)/args
+	cp test/*.h    $(INCLUDEDIR)/test
 	cp threads/*.h $(INCLUDEDIR)/threads
 
 prepare:
@@ -36,6 +37,7 @@ prepare:
 	mkdir -p $(PREFIX)/include
 	mkdir -p $(INCLUDEDIR)
 	mkdir -p $(INCLUDEDIR)/args
+	mkdir -p $(INCLUDEDIR)/test
 	mkdir -p $(INCLUDEDIR)/threads
 
 clean:
