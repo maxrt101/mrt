@@ -183,3 +183,35 @@ To build tests, run `make -C tests PREFIX=/path/to/installation/folder`
  - `DelayedExecutor& run<Duration = std::chrono::seconds, ThreadFunction, Args...>(int interval, ThreadFunction&& thread_function, Args&&... args)` - Runs `thread_function` after `delay` number of `Duration` until `stop()` is called
 <br/><br/>
   
+## `mrt::test` - Tests Support
+  
+### `bool run(const Test& test, bool print = false)`
+#### Header: `mrt/test/test.h`
+#### Description: Runs the test, returns test result, if print == true - prints test result along with it's name
+<br/><br/>
+  
+### `bool run(const std::vector<Test>& tests, bool print = false);`
+#### Header: `mrt/test/test.h`
+#### Description: Same as above, but for multiple tests
+<br/><br/>
+  
+### `class mrt::test::Test`
+#### Header: `mrt/test/test.h`
+#### Description: Represents a test
+#### Members:
+ - `FunctionType` - represents a function type
+ - `Test(const std::string& name, FunctionType function)` - Constructor
+ - `bool run() const` - Runs the function
+ - `std::string getName() const` - Returns test name
+ - `FunctionType getFunction() const` - Returns test function
+<br/><br/>
+  
+### `class TestFramework`
+#### Header: `mrt/test/framework.h`
+#### Description: Wraps tests
+#### Members:
+ - `void addTest(Test test)` - Adds test
+ - `bool run(bool print = false)` - Runs all tests
+ - `const std::map<std::string, bool>& getResults() const` - Returns tests results
+<br/><br/>
+
