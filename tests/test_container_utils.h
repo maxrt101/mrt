@@ -20,6 +20,7 @@ void test_container_utils_add_tests(mrt::test::TestFramework& testFramework) {
   }});
 
   std::map<std::string, int> map {{"test", 1}, {"map", 2}};
+  std::map<std::string, int> map2 {{"test", 2}, {"map", 3}};
 
   testFramework.addTest({"Test Container Utils - hasKey 1", [map]() -> bool {
     return mrt::hasKey(map, std::string("test"));
@@ -27,6 +28,18 @@ void test_container_utils_add_tests(mrt::test::TestFramework& testFramework) {
   
   testFramework.addTest({"Test Container Utils - hasKey 2", [map]() -> bool {
     return !mrt::hasKey(map, std::string("abcd"));
+  }});
+
+  testFramework.addTest({"Test Container Utils - Equal 1", [map, map2]() -> bool {
+    return !mrt::equal(map, map2);
+  }});
+  
+  testFramework.addTest({"Test Container Utils - Equal 2", [map]() -> bool {
+    return mrt::equal(map, map);
+  }});
+  
+  testFramework.addTest({"Test Container Utils - Equal Predicate", [map, map2]() -> bool {
+    return mrt::equal(map, map2, [](auto a, auto b) { return a.first == b.first; });
   }});
 }
 

@@ -16,9 +16,12 @@ TARGET   := $(PREFIX)/bin/mrt_test
 test: build
 	$(PREFIX)/bin/mrt_test
 
-build:
+build: prepare
 	$(info Building $(TARGET))
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(SRC) -o $(TARGET)
+
+prepare:
+	mkdir -p $(PREFIX)/bin
 
 $(V).SILENT:
 

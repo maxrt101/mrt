@@ -24,6 +24,25 @@ inline bool hasKey(const M<T, Args...>& map, const T& value) {
   return map.find(value) != map.end();
 }
 
+/* Compares containers (vectors, maps, etc)
+ * Template parameters:
+ *  C - Container
+ */
+template <typename C>
+inline bool equal(const C& lhs, const C& rhs) {
+  return lhs.size() == rhs.size() && std::equal(lhs.begin(), lhs.end(), rhs.begin());
+}
+
+/* Compares containers (vectors, maps, etc) by predicate
+ * Template parameters:
+ *  C - Container
+ *  P - Predicate (for example [](auto a, auto b) -> bool { return a == b; })
+ */
+template <typename C, typename P>
+inline bool equal(const C& lhs, const C& rhs, P pred) {
+  return lhs.size() == rhs.size() && std::equal(lhs.begin(), lhs.end(), rhs.begin(), pred);
+}
+
 /* Checks of value is in any of args */
 template <typename T, typename ... Args>
 inline bool isIn(T&& value, Args&& ...args) {
