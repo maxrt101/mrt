@@ -41,5 +41,5 @@ prepare:
 	mkdir -p $(INCLUDEDIR)/threads
 
 clean:
-	rm $(OBJS)
+	rm -rf $(OBJS)
 
