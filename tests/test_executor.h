@@ -8,7 +8,7 @@
 using namespace std::literals::chrono_literals;
 
 void test_executor_add_tests(mrt::test::TestFramework& testFramework) {
-  testFramework.addTest({"Test Executor", []() -> bool {
+  testFramework.addTest({"Test Executor", "Tests executor", []() -> mrt::test::Result {
     int i = 0;
 
     mrt::threads::Executor().run([&i](){
@@ -17,10 +17,10 @@ void test_executor_add_tests(mrt::test::TestFramework& testFramework) {
     });
 
     std::this_thread::sleep_for(2s);
-    return i == 1;
+    return {i == 1, "Executor failed to execute the task"};
   }});
 
-  testFramework.addTest({"Test Delayed Executor", []() -> bool {
+  testFramework.addTest({"Test Delayed Executor", "Tests delayed execution", []() -> mrt::test::Result {
     int i = 0;
 
     mrt::threads::DelayedExecutor().run(1, [&i](){
@@ -28,10 +28,10 @@ void test_executor_add_tests(mrt::test::TestFramework& testFramework) {
     });
 
     std::this_thread::sleep_for(2s);
-    return i == 1;
+    return {i == 1, "Executor failed to execute the task"};
   }});
 
-  testFramework.addTest({"Test Interval Executor", []() -> bool {
+  testFramework.addTest({"Test Interval Executor", "Tests interval execution", []() -> mrt::test::Result {
     int i = 0;
 
     mrt::threads::IntervalExecutor e;
@@ -43,7 +43,7 @@ void test_executor_add_tests(mrt::test::TestFramework& testFramework) {
     std::this_thread::sleep_for(3s);
     e.stop();
     std::this_thread::sleep_for(1s);
-    return i > 0;
+    return {i > 0, "Executor failed to execute the task"};
   }});
 }
 

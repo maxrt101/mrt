@@ -6,7 +6,6 @@ PREFIX   ?= $(TOPDIR)/build
 CXX      := g++
 
 CXXFLAGS += -std=c++17 -I$(PREFIX)/include
-LDFLAGS  += -L$(PREFIX)/lib -lmrt
 
 SRC      := main.cc
 TARGET   := $(PREFIX)/bin/mrt_test
@@ -18,10 +17,9 @@ test: build
 
 build: prepare
 	$(info Building $(TARGET))
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(SRC) -o $(TARGET)
+	$(CXX) $(CXXFLAGS) $(SRC) -o $(TARGET)
 
 prepare:
 	mkdir -p $(PREFIX)/bin
 
 $(V).SILENT:
-

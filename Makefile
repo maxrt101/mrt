@@ -1,19 +1,31 @@
 # mrt c++ lib
 
-export TOPDIR := $(shell pwd)
-export PREFIX ?= $(TOPDIR)/build
+export TOPDIR     := $(shell pwd)
+export PREFIX     ?= $(TOPDIR)/build
+export INCLUDEDIR := $(PREFIX)/include/mrt
 
 .PHONY: build
 
-build:
-	$(info Building mrt)
-	make -C src DEBUG=$(DEBUG)
+$(info Building mrt)
+
+build: install-headers
+
+install-headers: prepare
+	cp src/*.h         $(INCLUDEDIR)
+	cp src/args/*.h    $(INCLUDEDIR)/args
+	cp src/test/*.h    $(INCLUDEDIR)/test
+	cp src/console/*.h $(INCLUDEDIR)/console
+	cp src/threads/*.h $(INCLUDEDIR)/threads
+
+prepare:
+	mkdir -p $(PREFIX)
+	mkdir -p $(INCLUDEDIR)
+	mkdir -p $(INCLUDEDIR)/args
+	mkdir -p $(INCLUDEDIR)/test
+	mkdir -p $(INCLUDEDIR)/console
+	mkdir -p $(INCLUDEDIR)/threads
 
 test:
 	make -C tests
 
-clean:
-	make -C src clean
-
 $(V).SILENT:
-

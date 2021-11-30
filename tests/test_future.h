@@ -8,7 +8,7 @@
 using namespace  std::literals::chrono_literals;
 
 void test_future_add_tests(mrt::test::TestFramework& testFramework) {
-  testFramework.addTest({"Test Future Get", []() -> bool {
+  testFramework.addTest({"Test Future Get", "Tests mrt::future::get method", []() -> mrt::test::Result {
     bool result = true;
 
     mrt::threads::Future<int> f;
@@ -22,10 +22,10 @@ void test_future_add_tests(mrt::test::TestFramework& testFramework) {
     
     std::this_thread::sleep_for(2s);
 
-    return result;
+    return {result, "mrt::future::get failed"};
   }});
   
-  testFramework.addTest({"Test Future Callback", []() -> bool {
+  testFramework.addTest({"Test Future Callback", "Tests mrt::future::onReady", []() -> mrt::test::Result {
     bool result = true;
 
     mrt::threads::Future<int> f;
@@ -39,7 +39,7 @@ void test_future_add_tests(mrt::test::TestFramework& testFramework) {
 
     std::this_thread::sleep_for(2s);
 
-    return result;
+    return {result, "mrt::future::onReady failed"};
   }});
 }
 
