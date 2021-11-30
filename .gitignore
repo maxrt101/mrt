@@ -34,5 +34,12 @@
 # MacOS
 .DS_Store
 
+# vscode
+.vscode
+
+# vim
+*.swp
+
 # Project Specific
 build/*
+

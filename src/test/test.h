@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include <mrt/console/colors.h>
+#include <mrt/test/check.h>
 
 namespace mrt {
 namespace test {
@@ -54,7 +55,12 @@ class Test {
 
 inline Result run(const Test& test, bool print = false) {
   using namespace mrt::console::colors;
-  Result result = test.run();
+  Result result;
+  try {
+    result = test.run();
+  } catch (AssertionError& e) {
+    result = {false, e.getMsg()};
+  }
   if (result.result) {
     std::cout << "[ " << GREEN << " OK " << RESET << " ] " << test.getName();
     if (test.getDescription().size()) {

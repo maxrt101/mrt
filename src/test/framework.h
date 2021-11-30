@@ -40,8 +40,8 @@ class TestFramework {
       int fail_count = m_results.size() - ok_count;
       int count_digits = countDigits(m_results.size());
       std::cout << "Summary: " << std::endl;
-      std::cout << "OK:     " << GREEN << std::setw(count_digits) << ok_count << RESET << " - " << std::setw(3) << (ok_count  *100.0/m_results.size()) << "%" << std::endl;
-      std::cout << "FAILED: " << RED << std::setw(count_digits) << fail_count << RESET << " - " << std::setw(3) << (fail_count*100.0/m_results.size()) << "%" << std::endl;
+      std::cout << "OK:     " << GREEN << std::setw(count_digits) << ok_count << RESET << " - " << std::setw(3) << (int)(ok_count  *100.0/m_results.size()) << "%" << std::endl;
+      std::cout << "FAILED: " << RED << std::setw(count_digits) << fail_count << RESET << " - " << std::setw(3) << (int)(fail_count*100.0/m_results.size()) << "%" << std::endl;
     }
     return result;
   }
