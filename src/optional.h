@@ -40,7 +40,7 @@ class Optional {
     return *this;
   }
 
-  inline T returnOrElse(T else_value) {
+  inline T getOrElse(T else_value) {
     if (exists()) {
       return m_value;
     }

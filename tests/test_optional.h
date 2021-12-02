@@ -22,8 +22,8 @@ void test_optional_add_tests(mrt::test::TestFramework& testFramework) {
     get_positive_int(1).ifExists([&result](auto value) { result &= (value == 1); });
     get_positive_int(-1).ifNotExists([&result]() { result &= true; });
 
-    if (mrt::Optional<int>(5).returnOrElse(10) != 5) return {false, "mrt::Optional::returnOrElse failed"};
-    if (mrt::Optional<int>().returnOrElse(10) != 10) return {false, "mrt::Optional::returnOrElse failed"};
+    if (mrt::Optional<int>(5).getOrElse(10) != 5) return {false, "mrt::Optional::returnOrElse failed"};
+    if (mrt::Optional<int>().getOrElse(10) != 10) return {false, "mrt::Optional::returnOrElse failed"};
 
     return {result, "Optional tests failed"};
   }});
