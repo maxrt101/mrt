@@ -10,6 +10,7 @@
 #include "test_executor.h"
 #include "test_pool.h"
 #include "test_locked.h"
+#include "test_config.h"
 
 
 int main(int argc, char ** argv) {
@@ -22,6 +23,7 @@ int main(int argc, char ** argv) {
   test_executor_add_tests(testFramework);
   test_pool_add_tests(testFramework);
   test_locked_add_tests(testFramework);
+  test_config_add_tests(testFramework);
 
   bool result = testFramework.run(true);
 

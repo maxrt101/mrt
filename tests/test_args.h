@@ -1,6 +1,6 @@
 
 #include <mrt/test/framework.h>
-#include <mrt/args/args.h>
+#include <mrt/args.h>
 
 #include <string>
 

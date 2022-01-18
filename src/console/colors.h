@@ -8,25 +8,27 @@ namespace console {
 namespace colors {
 
 #ifdef MRT_NO_COLORS
-constexpr auto RESET   = "";
-constexpr auto BLACK   = "";
-constexpr auto RED     = "";
-constexpr auto GREEN   = "";
-constexpr auto YELLOW  = "";
-constexpr auto BLUE    = "";
-constexpr auto MAGENTA = "";
-constexpr auto CYAN    = "";
-constexpr auto WHITE   = "";
+constexpr char RESET[]   = "";
+constexpr char BLACK[]   = "";
+constexpr char RED[]     = "";
+constexpr char RED_RED[] = "";
+constexpr char GREEN[]   = "";
+constexpr char YELLOW[]  = "";
+constexpr char BLUE[]    = "";
+constexpr char MAGENTA[] = "";
+constexpr char CYAN[]    = "";
+constexpr char WHITE[]   = "";
 #else
-constexpr auto RESET   = "\u001b[0m";
-constexpr auto BLACK   = "\u001b[30m";
-constexpr auto RED     = "\u001b[31m";
-constexpr auto GREEN   = "\u001b[32m";
-constexpr auto YELLOW  = "\u001b[33m";
-constexpr auto BLUE    = "\u001b[34m";
-constexpr auto MAGENTA = "\u001b[35m";
-constexpr auto CYAN    = "\u001b[36m";
-constexpr auto WHITE   = "\u001b[37m";
+constexpr char RESET[]   = "\u001b[0m";
+constexpr char BLACK[]   = "\u001b[30m";
+constexpr char RED[]     = "\u001b[31m";
+constexpr char RED_RED[] = "\u001b[41m";
+constexpr char GREEN[]   = "\u001b[32m";
+constexpr char YELLOW[]  = "\u001b[33m";
+constexpr char BLUE[]    = "\u001b[34m";
+constexpr char MAGENTA[] = "\u001b[35m";
+constexpr char CYAN[]    = "\u001b[36m";
+constexpr char WHITE[]   = "\u001b[37m";
 #endif
 
 } /* namespace color */

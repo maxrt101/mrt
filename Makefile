@@ -12,7 +12,6 @@ build: install-headers
 
 install-headers: prepare
 	cp src/*.h         $(INCLUDEDIR)
-	cp src/args/*.h    $(INCLUDEDIR)/args
 	cp src/test/*.h    $(INCLUDEDIR)/test
 	cp src/console/*.h $(INCLUDEDIR)/console
 	cp src/threads/*.h $(INCLUDEDIR)/threads
@@ -20,7 +19,6 @@ install-headers: prepare
 prepare:
 	mkdir -p $(PREFIX)
 	mkdir -p $(INCLUDEDIR)
-	mkdir -p $(INCLUDEDIR)/args
 	mkdir -p $(INCLUDEDIR)/test
 	mkdir -p $(INCLUDEDIR)/console
 	mkdir -p $(INCLUDEDIR)/threads
