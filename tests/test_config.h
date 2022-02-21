@@ -13,6 +13,13 @@ void test_config_add_tests(mrt::test::TestFramework& testFramework) {
     MRT_ASSERT_TRUE(config.getValueOr("test", "c", "0") == "10", "Config parsing failed");
     MRT_ASSERT_TRUE(config.getValueOr("test", "d", "0") == "0", "Config parsing failed");
 
+    std::string main_a;
+    config.ifExists("main", "a", [&main_a](auto value) {
+      main_a = value;
+    });
+
+    MRT_ASSERT_EQUAL(main_a, "3", "Config parsing failed");
+
     return {true, ""};
   }});
 }

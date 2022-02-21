@@ -1,6 +1,7 @@
 #ifndef _MRT_CONFIG_H_
 #define _MRT_CONFIG_H_ 1
 
+#include <functional>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -31,6 +32,15 @@ class Config {
       }
     }
     return false;
+  }
+
+  inline void ifExists(const std::string& section, const std::string& key, std::function<void(const std::string&)> cb) const {
+    if (m_sections.find(section) != m_sections.end()) {
+      auto itr = m_sections[section].find(key);
+      if (itr != m_sections[section].end()) {
+        cb(itr->second);
+      }
+    }
   }
 
   inline Section& getSection(const std::string& section) const {

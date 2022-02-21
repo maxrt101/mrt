@@ -16,24 +16,11 @@ namespace mrt {
 namespace args {
 
 /* Represents type of command line option */
-MRT_DEF_ENUM(OptionType, FLAG, WITH_VALUE, POSITIONAL)
- public:
-  inline OptionType(char c) {
-    switch (c) {
-      case 'F': m_value = OptionType::FLAG.m_value; break;
-      case 'V': m_value = OptionType::WITH_VALUE.m_value; break;
-      case 'P': m_value = OptionType::POSITIONAL.m_value; break;
-      default:
-        throw std::invalid_argument("Invalid option char");
-    }
-  }
+enum OptionType {
+  FLAG,
+  WITH_VALUE,
+  POSITIONAL,
 };
-
-MRT_DEF_ENUM_FIELDS(mrt::args::OptionType,
-  mrt::args::OptionType::FLAG(0),
-  mrt::args::OptionType::WITH_VALUE(1),
-  mrt::args::OptionType::POSITIONAL(2)
-);
 
 struct Option {
   std::string name;

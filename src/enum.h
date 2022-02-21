@@ -11,7 +11,7 @@
  */
 #define MRT_DEF_ENUM(_name, ...) \
   struct _name { \
-    static const OptionType __VA_ARGS__; \
+    static const _name __VA_ARGS__; \
     constexpr operator int() const { return m_value; } \
     constexpr bool operator==(const _name& rhs) const { \
       return m_value == rhs.m_value; \
@@ -25,7 +25,7 @@
     } \
    private: \
     int m_value; \
-    constexpr OptionType(int value) : m_value(value) {} \
+    constexpr _name(int value) : m_value(value) {} \
    public:
 
 /* Defines enum's fields 

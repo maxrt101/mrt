@@ -69,7 +69,7 @@ class ThreadPool {
     }
   }
 
-  /* Common code for WaitForAll & FinishAll */
+  /* Common code for waitForAll & finishAll */
   inline void terminate() {
     m_cv.notify_all();
 
