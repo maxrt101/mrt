@@ -20,21 +20,25 @@ class Future {
  public:
   inline Future() : m_is_ready(false) {}
 
+  /* Is future ready? */
   inline bool isReady() const {
     return m_is_ready.load();
   }
 
+  /* Adds a callback, that will be called, when the resource is ready */
   inline void onReady(Callback callback) {
     std::unique_lock<std::mutex> lock(m_callback_mutex);
     m_callbacks.push_back(callback);
   } 
 
+  /* Returns the future's value, blocks if it's not ready */
   inline T& get() {
     std::unique_lock<std::mutex> lock(m_value_mutex);
     m_cv.wait(lock, [&](){ return m_is_ready.load(); });
     return m_value;
   }
 
+  /* Sets the future's value, calls all onReady callbacks */
   inline void set(T&& value) {
     {
       std::unique_lock<std::mutex> lock(m_value_mutex);

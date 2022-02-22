@@ -36,6 +36,8 @@
 
 namespace mrt {
 
+/* to_string functions - return a string representation of an object */
+
 template<typename T>
 inline std::string to_string(const T& v) {
   return std::to_string(v);
@@ -65,11 +67,17 @@ _MRT_MAP_TO_STRING_FUNC(std::unordered_map)
 
 namespace impl {
 
+/* Implementation for mrt::format - base case */
 template <typename... Args>
 inline void format(const std::string_view& fmt, std::string& output) {
   output += fmt;
 }
 
+/* Implementation for mrt::format
+ * Format String Specification:
+ *  {} - value
+ *  {T} - value type
+ */
 template <typename... Args, typename T>
 inline void format(const std::string_view& fmt, std::string& output, T& val, Args&&... args) {
   for (size_t i = 0; i < fmt.size(); i++) {
@@ -82,7 +90,7 @@ inline void format(const std::string_view& fmt, std::string& output, T& val, Arg
         } else {
           switch (fmt[i]) {
             case 'T': { // Type of argument
-              if (fmt[i+1] != '}') {
+              if (fmt[i+1] != '}') { // TODO: Handle error
                 output += "{T";
                 continue;
               }
@@ -108,6 +116,11 @@ inline void format(const std::string_view& fmt, std::string& output, T& val, Arg
 
 } /* namespace impl */
 
+/* Returns a formatted string
+ * Parameters:
+ *  fmt - format string
+ *  args
+ */
 template <typename... Args>
 inline std::string format(std::string fmt, Args&&... args) {
   std::string output;

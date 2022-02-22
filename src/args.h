@@ -26,13 +26,13 @@ struct Option {
   std::string name;
   OptionType type;
   std::vector<std::string> options;
-  std::string help_string;
+  std::string helpString;
   bool many = false; // for POSITIONAL type
 
   inline Option(const std::string& name, OptionType type,
          const std::vector<std::string>& options,
-         const std::string& help_string, bool many = false) 
-    : name(name), type(type), options(options), help_string(help_string), many(many) {}
+         const std::string& helpString, bool many = false) 
+    : name(name), type(type), options(options), helpString(helpString), many(many) {}
 };
 
 class ParserResult {
@@ -42,58 +42,56 @@ public:
   using callback_type = std::function<void(const std::vector<std::string>&)>;
 
  public:
-  inline bool exists(const std::string& option_name) const {
-    return m_parsed.find(option_name) != m_parsed.end();
+  inline bool exists(const std::string& optionName) const {
+    return m_parsed.find(optionName) != m_parsed.end();
   }
 
-  inline void ifExists(const std::string& option_name, callback_type cb) const {
-    if (exists(option_name)) {
-      cb(get(option_name));
+  inline void ifExists(const std::string& optionName, callback_type cb) const {
+    if (exists(optionName)) {
+      cb(get(optionName));
     }
   }
 
-  inline const std::vector<std::string>& get(const std::string& option_name) const {
-    return m_parsed.at(option_name);
+  inline const std::vector<std::string>& get(const std::string& optionName) const {
+    return m_parsed.at(optionName);
   }
 
-  inline const std::vector<std::string>& getOr(const std::string& option_name,
-                                        const std::vector<std::string>& default_value) const {
-    if (exists(option_name)) {
-      return get(option_name);
+  inline const std::vector<std::string>& getOr(const std::string& optionName, const std::vector<std::string>& defaultValue) const {
+    if (exists(optionName)) {
+      return get(optionName);
     }
-    return default_value;
+    return defaultValue;
   }
 
-  inline const std::string& getFirst(const std::string& option_name) const {
-    return get(option_name)[0];
+  inline const std::string& getFirst(const std::string& optionName) const {
+    return get(optionName)[0];
   }
 
-  inline const std::string& getFirstOr(const std::string& option_name,
-                                const std::string& default_value) const {
-    if (exists(option_name)) {
-      return get(option_name)[0];
+  inline const std::string& getFirstOr(const std::string& optionName, const std::string& defaultValue) const {
+    if (exists(optionName)) {
+      return get(optionName)[0];
     }
-    return default_value;
+    return defaultValue;
   }
 
   inline bool hasUnrecognizedParams() const {
-    return !m_unrecognized_params.empty();
+    return !m_unrecognizedParams.empty();
   }
 
   inline std::vector<std::string>& getUnrecognizedParams() {
-    return m_unrecognized_params;
+    return m_unrecognizedParams;
   }
 
  private:
-  int m_positional_count = 0;
+  int m_positionalCount = 0;
   std::map<std::string, std::vector<std::string>> m_parsed; // Stores parsed options
-  std::vector<std::string> m_unrecognized_params;           // Stores parsed unregistered parameters
+  std::vector<std::string> m_unrecognizedParams;           // Stores parsed unregistered parameters
 };
 
 class Parser {
  public:
-  inline Parser(const std::string& help_string) : m_help_string(help_string) {}
-  inline Parser(const std::string& help_string, const std::initializer_list<Option>& il) : m_help_string(help_string) {
+  inline Parser(const std::string& help_string) : m_helpString(help_string) {}
+  inline Parser(const std::string& help_string, const std::initializer_list<Option>& il) : m_helpString(help_string) {
     for (auto& opt : il) {
       if (opt.type == OptionType::POSITIONAL) {
         m_positional.push_back(opt);
@@ -115,7 +113,7 @@ class Parser {
     ParserResult result;
     for (int i = 1; i < argc; ++i) {
       if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")) {
-        std::cout << m_help_string << std::endl
+        std::cout << m_helpString << std::endl
                   << "Usage: " << argv[0] << " [OPTIONS] ";
         for (auto& opt : m_positional) {
           std::cout << "[" << opt.name;
@@ -126,9 +124,9 @@ class Parser {
         }
         addOption({"help", OptionType::FLAG, {"-h", "--help"}, "Shows this help message",});
 
-        int max_option_length = 0;
-        std::vector<std::pair<std::string, std::string>> options_to_print;
-        std::vector<std::pair<std::string, std::string>> positionals_to_print;
+        int maxOptionLength = 0;
+        std::vector<std::pair<std::string, std::string>> optionsToPrint;
+        std::vector<std::pair<std::string, std::string>> positionalsToPrint;
 
         for (auto& opt : m_options) {
           std::string names;
@@ -138,26 +136,26 @@ class Parser {
               names += ", ";
             }
           }
-          max_option_length = std::max(max_option_length, (int)names.size());
-          options_to_print.push_back({names, opt.help_string});
+          maxOptionLength = std::max(maxOptionLength, (int)names.size());
+          optionsToPrint.push_back({names, opt.helpString});
         }
 
         for (auto& opt : m_positional) {
-          max_option_length = std::max(max_option_length, (int)opt.name.size());
-          positionals_to_print.push_back({opt.name, opt.help_string});
+          maxOptionLength = std::max(maxOptionLength, (int)opt.name.size());
+          positionalsToPrint.push_back({opt.name, opt.helpString});
         }
         
         std::cout << "\nOptions:\n";
-        for (auto& opt : options_to_print) {
+        for (auto& opt : optionsToPrint) {
           std::cout << "\t" << std::left
-                    << std::setw(max_option_length) << opt.first
+                    << std::setw(maxOptionLength) << opt.first
                     << " - " << opt.second << std::endl;
         }
 
         if (m_positional.size()) std::cout << "\nPositoinal:\n";
-        for (auto& opt : positionals_to_print) {
+        for (auto& opt : positionalsToPrint) {
           std::cout << "\t" << std::left
-                    << std::setw(max_option_length) << opt.first
+                    << std::setw(maxOptionLength) << opt.first
                     << " - " << opt.second << std::endl;
         }
         exit(EXIT_SUCCESS);
@@ -184,14 +182,14 @@ class Parser {
             }
           }
         } else  {
-          if (result.m_positional_count < m_positional.size()) { // POSITIONAL
-            Option& option = m_positional[result.m_positional_count++];
+          if (result.m_positionalCount < m_positional.size()) { // POSITIONAL
+            Option& option = m_positional[result.m_positionalCount++];
             result.m_parsed[option.name].push_back(argv[i]);
           } else if (m_positional.size() && m_positional.back().many) {
             Option& option = m_positional.back();
             result.m_parsed[option.name].push_back(argv[i]);
           } else { // Unrecognized parameters end up here
-            result.m_unrecognized_params.push_back(argv[i]);
+            result.m_unrecognizedParams.push_back(argv[i]);
           }
         }
       }
@@ -200,7 +198,7 @@ class Parser {
   }
 
  private:
-  std::string m_help_string;
+  std::string m_helpString;
   std::vector<Option> m_options;                             // Stores registered options
   std::vector<Option> m_positional;
 };

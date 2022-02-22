@@ -12,7 +12,8 @@ void test_args_add_tests(mrt::test::TestFramework& testFramework) {
       {"version", mrt::args::FLAG, {"-v", "--version"}, "Shows Version"}
     }).parse(sizeof(argv)/sizeof(argv[0]), argv);
 
-    return {parsed.exists("version"), "The flag is not present"};
+    MRT_ASSERT_TRUE(parsed.exists("version"), "The flag is not present");
+    return {};
   }});
 
   testFramework.addTest({"Test Args - Value", "Tests if args with values are identified correctly", []() -> mrt::test::Result {
@@ -22,7 +23,8 @@ void test_args_add_tests(mrt::test::TestFramework& testFramework) {
       {"int", mrt::args::WITH_VALUE, {"-i", "--int"}, "Pass int"}
     }).parse(sizeof(argv)/sizeof(argv[0]), argv);
 
-    return {parsed.getFirstOr("int", "") == "100", "The value of an argument is not what it should be"};
+    MRT_ASSERT_EQUAL(parsed.getFirstOr("int", ""), "100", "The value of an argument is not what it should be");
+    return {};
   }});
 
   testFramework.addTest({"Test Args - Positional", "Tests if positional args are identified correctly", []() -> mrt::test::Result {
@@ -32,7 +34,8 @@ void test_args_add_tests(mrt::test::TestFramework& testFramework) {
       {"pos", mrt::args::POSITIONAL, {}, "Pass value"}
     }).parse(sizeof(argv)/sizeof(argv[0]), argv);
 
-    return {parsed.getFirstOr("pos", "") == "ABC", "Positional args are not identified correctly"};
+    MRT_ASSERT_EQUAL(parsed.getFirstOr("pos", ""), "ABC", "Positional args are not identified correctly");
+    return {};
   }});
 }
 

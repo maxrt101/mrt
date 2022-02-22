@@ -8,43 +8,43 @@ namespace mrt {
 template <typename T>
 class Optional {
  public:
-  using value_type = T;
-  using function_type = std::function<void(value_type&)>;
+  using ValueType = T;
+  using FunctionType = std::function<void(ValueType&)>;
 
  private:
   bool m_exists;
-  value_type m_value;
+  ValueType m_value;
 
  public:
   inline Optional() : m_exists(false) {}
-  inline Optional(value_type value) : m_exists(true), m_value(value) {}
+  inline Optional(ValueType value) : m_exists(true), m_value(value) {}
 
   inline bool exists() { return m_exists; }
-  inline value_type& get() { return m_value; }
+  inline ValueType& get() { return m_value; }
 
-  inline value_type* operator->() { return &m_value; }
-  inline value_type& operator*() { return m_value; }
+  inline ValueType* operator->() { return &m_value; }
+  inline ValueType& operator*() { return m_value; }
   inline operator bool() { return m_exists; }
 
-  inline Optional<value_type>& ifExists(function_type function) {
+  inline Optional<ValueType>& ifExists(FunctionType function) {
     if (exists()) {
       function(m_value);
     }
     return *this;
   }
 
-  inline Optional<value_type>& ifNotExists(std::function<void()> function) {
+  inline Optional<ValueType>& ifNotExists(std::function<void()> function) {
     if (!exists()) {
       function();
     }
     return *this;
   }
 
-  inline T getOrElse(T else_value) {
+  inline T getOrElse(T elseValue) {
     if (exists()) {
       return m_value;
     }
-    return else_value;
+    return elseValue;
   }
 };
 

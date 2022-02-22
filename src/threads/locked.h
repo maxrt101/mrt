@@ -11,32 +11,37 @@ namespace threads {
 template <typename T>
 class Locked {
  public:
-  using FunctionType = std::function<void(T&)>;
+  using Callback = std::function<void(const T&)>;
+  using Updater = std::function<void(T&)>;
 
  private:
   T m_data;
   std::mutex m_mutex;
-  std::vector<FunctionType> m_callbacks;
+  std::vector<Callback> m_callbacks;
 
  public:
   inline Locked() {}
   inline Locked(const T& data) : m_data(data) {}
 
+  /* Returns ref to underlying resource, blocks if the resource is in use */
   inline T& get() {
     std::unique_lock<std::mutex> lock(m_mutex);
     return m_data;
   }
 
+  /* Sets an underlying resource, blocks if the resource is used */
   inline void set(const T& data) {
     std::unique_lock<std::mutex> lock(m_mutex);
     m_data = data;
   }
 
-  void onUpdate(FunctionType f) {
+  /* Adds a callback for resource update */
+  void onUpdate(Callback f) {
     m_callbacks.push_back(f);
   }
 
-  void update(FunctionType f) {
+  /* Updates a resource value, using a function of type void(T&) */
+  void update(Updater f) {
     std::unique_lock<std::mutex> lock(m_mutex);
     f(m_data);
     for (auto& cb : m_callbacks) {

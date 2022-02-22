@@ -31,17 +31,17 @@ class TestFramework {
     using namespace mrt::console::colors;
     bool result = true;
     for (const Test& test : m_tests) {
-      Result test_result = mrt::test::run(test, print);
-      m_results[test.getName()] = test_result;
-      result &= test_result.result;
+      Result testResult = mrt::test::run(test, print);
+      m_results[test.getName()] = testResult;
+      result &= testResult.result;
     }
     if (print) {
-      int ok_count = mrt::reduce<int>(m_results, [](int prev, const auto& r){ return prev + (r.second.result ? 1 : 0); }, 0);
-      int fail_count = m_results.size() - ok_count;
-      int count_digits = countDigits(m_results.size());
+      int okCount = mrt::reduce<int>(m_results, [](int prev, const auto& r){ return prev + (r.second.result ? 1 : 0); }, 0);
+      int failCount = m_results.size() - okCount;
+      int digits = countDigits(m_results.size());
       std::cout << "Summary: " << std::endl;
-      std::cout << "OK:     " << GREEN << std::setw(count_digits) << ok_count << RESET << " - " << std::setw(3) << (int)(ok_count  *100.0/m_results.size()) << "%" << std::endl;
-      std::cout << "FAILED: " << RED << std::setw(count_digits) << fail_count << RESET << " - " << std::setw(3) << (int)(fail_count*100.0/m_results.size()) << "%" << std::endl;
+      std::cout << "OK:     " << GREEN << std::setw(digits) << okCount << RESET << " - " << std::setw(3) << (int)(okCount  *100.0/m_results.size()) << "%" << std::endl;
+      std::cout << "FAILED: " << RED << std::setw(digits) << failCount << RESET << " - " << std::setw(3) << (int)(failCount*100.0/m_results.size()) << "%" << std::endl;
     }
     return result;
   }

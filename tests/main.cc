@@ -1,5 +1,4 @@
-/**
- */
+/**/
 
 #include <mrt/test/framework.h>
 

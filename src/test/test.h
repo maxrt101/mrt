@@ -13,11 +13,8 @@ namespace mrt {
 namespace test {
 
 struct Result {
-  bool result;
-  std::string fail_msg;
-
-  // inline Result(bool result) : result(result) {}
-  // inline Result(bool result, const std::string& fail_msg) : result(result), fail_msg(fail_msg) {}
+  bool result = true;
+  std::string failMsg = "";
 };
 
 class Test {
@@ -69,8 +66,8 @@ inline Result run(const Test& test, bool print = false) {
     std::cout << std::endl;
   } else {
     std::cout << "[ " << RED << "FAIL" << RESET << " ] " << test.getName();
-    if (result.fail_msg.size()) {
-      std::cout << " - " << result.fail_msg;
+    if (result.failMsg.size()) {
+      std::cout << " - " << result.failMsg;
     }
     std::cout << std::endl;
   }

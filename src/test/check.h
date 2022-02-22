@@ -16,6 +16,7 @@ namespace test {
 
 class AssertionError : std::exception {
   std::string m_msg;
+
  public:
   inline AssertionError(const std::string& msg) : m_msg(msg) {}
   inline std::string getMsg() { return m_msg; }

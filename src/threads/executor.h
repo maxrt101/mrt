@@ -9,66 +9,77 @@
 namespace mrt {
 namespace threads {
 
+/* Runs task in a thread */
 class Executor {
  public:
+  /* Used for releasing an executor, when it's done */
   using Deleter = std::function<void(Executor*)>;
 
+  /* Default behavior is to stop the executior (calls join on the thread) */
   static inline void DefaultDeleter(Executor* object) {
     object->stop();
   }
 
+  /* Detaches the thread */
   static inline void DetachDeleter(Executor* object) {
     object->detach();
   }
 
  public:
   inline Executor(Deleter deleter = DefaultDeleter)
-    : m_deleter(deleter), m_is_running(false) {}
+    : m_deleter(deleter), m_isRunning(false) {}
 
+  /* If the executior is running, calls a deleter */
   inline virtual ~Executor() {
-    if (m_is_running.load()) {
+    if (m_isRunning.load()) {
       m_deleter(this);
     }
   }
   
+  /* Main executor function, runs threadFunction with args */
   template <class ThreadFunction, class ... Args>
-  inline Executor& run(ThreadFunction&& thread_function, Args&&... args) {
-    if (m_is_running.load()) {
+  inline Executor& run(ThreadFunction&& threadFunction, Args&&... args) {
+    if (m_isRunning.load()) {
       stop();
     }
-    m_is_running.store(true);
-    m_thread = std::thread([thread_function](Args&&... args) {
-      thread_function(args...);
+    m_isRunning.store(true);
+    m_thread = std::thread([threadFunction](Args&&... args) {
+      threadFunction(args...);
     }, args...);
     return *this;
   }
 
+  /* Calls join */
   inline void stop() {
-    m_is_running.store(false);
+    m_isRunning.store(false);
     join();
   }
 
+  /* Joins the thread */
   inline void join() {
     if (m_thread.joinable()) {
       m_thread.join();
     }
   }
 
+  /* Detaches the thread */
   inline void detach() {
     m_thread.detach();
   }
 
+  /* Is executor running */
   inline bool isRunning() {
-    return m_is_running.load();
+    return m_isRunning.load();
   }
  
  private:
   std::thread m_thread;
-  std::atomic<bool> m_is_running;
+  std::atomic<bool> m_isRunning;
   Deleter m_deleter;
 };
 
 
+/* Starts the task with a delay */
 class DelayedExecutor : public Executor {
  public:
   inline DelayedExecutor(Deleter deleter = DefaultDeleter)
@@ -77,17 +88,19 @@ class DelayedExecutor : public Executor {
   template <class Duration = std::chrono::seconds,
             class ThreadFunction,
             class ... Args>
-  inline DelayedExecutor& run(int delay, ThreadFunction&& thread_function, Args&&... args) {
+  inline DelayedExecutor& run(int delay, ThreadFunction&& threadFunction, Args&&... args) {
     Executor::run(
-      [delay, thread_function](Args&&... args) {
+      [delay, threadFunction](Args&&... args) {
         std::this_thread::sleep_for(Duration(delay));
-        thread_function(args...);
+        threadFunction(args...);
       }, std::forward<Args>(args)...
     );
     return *this;
   }
 };
 
+
+/* Runs the task with intervals */
 class IntervalExecutor : public Executor {
  public:
   inline IntervalExecutor(Deleter deleter = DefaultDeleter)
@@ -96,12 +109,12 @@ class IntervalExecutor : public Executor {
   template <class Duration = std::chrono::seconds,
             class ThreadFunction,
             class ... Args>
-  inline IntervalExecutor& run(int interval, ThreadFunction&& thread_function, Args&&... args) {
+  inline IntervalExecutor& run(int interval, ThreadFunction&& threadFunction, Args&&... args) {
     Executor::run(
-      [this, interval, thread_function](Args&&... args) {
+      [this, interval, threadFunction](Args&&... args) {
         while (this->isRunning()) {
           std::this_thread::sleep_for(Duration(interval));
-          thread_function(args...);
+          threadFunction(args...);
         }
       }, std::forward<Args>(args)...
     );

@@ -18,9 +18,9 @@ namespace threads {
 template <class T = std::function<void(void)>>
 class ThreadPool {
  public:
-  inline ThreadPool(int threads_num = 0) {
-    if (threads_num) m_threads_num = threads_num;
-    for (int i = 0; i < m_threads_num; i++) {
+  inline ThreadPool(int threadsNum = 0) {
+    if (threadsNum) m_threadsNum = threadsNum;
+    for (int i = 0; i < m_threadsNum; i++) {
       m_pool.push_back(std::thread(&ThreadPool::threadWorker, this));
     }
   }
@@ -34,8 +34,8 @@ class ThreadPool {
   /* Adds task to the queue */
   inline void addTask(T task) {
     {
-      std::unique_lock<std::mutex> lock(m_queue_mutex);
-      m_pending_tasks.push(task);
+      std::unique_lock<std::mutex> lock(m_queueMutex);
+      m_pendingTasks.push(task);
     }
     m_cv.notify_one();
   }
@@ -58,12 +58,12 @@ class ThreadPool {
     while (1) {
       T task;
       {
-        std::unique_lock<std::mutex> lock(m_queue_mutex);
-        m_cv.wait(lock, [&]{ return !m_pending_tasks.empty() || m_terminate.load() || m_finish.load(); });
+        std::unique_lock<std::mutex> lock(m_queueMutex);
+        m_cv.wait(lock, [&]{ return !m_pendingTasks.empty() || m_terminate.load() || m_finish.load(); });
         if (m_terminate.load()) return;
-        if (m_finish.load() && m_pending_tasks.empty()) return;
-        task = m_pending_tasks.front();
-        m_pending_tasks.pop();
+        if (m_finish.load() && m_pendingTasks.empty()) return;
+        task = m_pendingTasks.front();
+        m_pendingTasks.pop();
       }
       task();
     }
@@ -83,13 +83,13 @@ class ThreadPool {
 
  private:
   std::vector<std::thread> m_pool;
-  std::queue<T> m_pending_tasks;
-  std::mutex m_queue_mutex;
+  std::queue<T> m_pendingTasks;
+  std::mutex m_queueMutex;
   std::condition_variable m_cv;
-  std::atomic<bool> m_terminate = false; // true, when WaitForAll is called
-  std::atomic<bool> m_finish = false;    // true, when FinishAll is called
+  std::atomic<bool> m_terminate = false; // true, when waitForAll is called
+  std::atomic<bool> m_finish = false;    // true, when finishAll is called
   bool m_stopped = false;
-  int m_threads_num = std::thread::hardware_concurrency();
+  int m_threadsNum = std::thread::hardware_concurrency();
 };
 
 } // namespace threads

@@ -44,7 +44,7 @@ inline LogLevel stringToLogLevel(const std::string& s) {
 }
 
 inline void vflogf(FILE* dest, LogLevel level, const std::string& format, va_list args) {
-    switch (level) {
+  switch (level) {
     case LogLevel::FATAL:   fprintf(dest, "%sFATAL",   mrt::console::RED_RED); break;
     case LogLevel::ERROR:   fprintf(dest, "%sERROR",   mrt::console::RED);     break;
     case LogLevel::WARNING: fprintf(dest, "%sWARNING", mrt::console::YELLOW);  break;
@@ -59,7 +59,7 @@ inline void vflogf(FILE* dest, LogLevel level, const std::string& format, va_lis
 }
 
 inline void vlogf(LogLevel level, const std::string& format, va_list args) {
-  // if (level < g_logLevel) return;
+  // if (level < g_logLevel) return; // global state cannot be used, because everyting is header-only
 
   FILE* dest = stdout;
   if (level > LogLevel::INFO) {
