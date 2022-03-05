@@ -11,6 +11,7 @@ inline void copy(T* dest, const T* src, size_t size) {
   }
 }
 
+template <typename T>
 inline T* copy(const T* src, size_t size) {
   T* buffer = new T[size];
   for (size_t i = 0; i < size; i++) {
