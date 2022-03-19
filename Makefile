@@ -1,4 +1,4 @@
-# mrt c++ lib
+# mrt
 
 export TOPDIR     := $(shell pwd)
 export PREFIX     ?= $(TOPDIR)/build
@@ -13,17 +13,17 @@ build: install-headers
 
 install-headers: prepare
 	$(info [+] Installing headers)
-	cp src/*.h         	$(INCLUDEDIR)
-	cp src/net/*.h    	$(INCLUDEDIR)/net
+	cp src/*.h          $(INCLUDEDIR)
+	cp src/net/*.h      $(INCLUDEDIR)/net
 	cp src/net/http/*.h $(INCLUDEDIR)/net/http
-	cp src/test/*.h    	$(INCLUDEDIR)/test
-	cp src/console/*.h 	$(INCLUDEDIR)/console
-	cp src/threads/*.h 	$(INCLUDEDIR)/threads
+	cp src/test/*.h     $(INCLUDEDIR)/test
+	cp src/console/*.h  $(INCLUDEDIR)/console
+	cp src/threads/*.h  $(INCLUDEDIR)/threads
 
 prepare:
 	$(info [+] Creating folders)
-	mkdir -p $(PREFIX)
 	mkdir -p $(BUILD)
+	mkdir -p $(PREFIX)
 	mkdir -p $(INCLUDEDIR)
 	mkdir -p $(INCLUDEDIR)/net
 	mkdir -p $(INCLUDEDIR)/net/http

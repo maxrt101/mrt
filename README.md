@@ -24,7 +24,7 @@ cd mrt
 make
 ```
 The install copies headers to an installation location.  
-You can specify install folder, by specifying `PREFIX`, e.g.   
+You can specify install folder, by setting `PREFIX`, e.g.   
 ```sh
 make PREFIX=/path/to/installation/folder
 ```
