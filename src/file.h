@@ -11,6 +11,7 @@
 #include <mrt/memory.h>
 
 namespace mrt {
+namespace io {
 
 class FileNotExistsError : public std::exception {
   constexpr static size_t kBufferSize = 256;
@@ -160,6 +161,10 @@ class File {
   // inline void writeBytes(const std::vector<uint8_t>& bytes) {} // TODO:
 
 };
+
+} /* namespace io */
+
+using File = io::File;
 
 } /* namespace mrt */
 
