@@ -5,9 +5,9 @@
 #include <chrono>
 #include <thread>
 
-using namespace  std::literals::chrono_literals;
+using namespace std::literals::chrono_literals;
 
-void test_future_add_tests(mrt::test::TestFramework& testFramework) {
+extern "C" void setupTests(mrt::test::TestFramework& testFramework) {
   testFramework.addTest({"Test Future Get", "Tests mrt::future::get method", []() -> mrt::test::Result {
     bool result = true;
 

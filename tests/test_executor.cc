@@ -7,7 +7,7 @@
 
 using namespace std::literals::chrono_literals;
 
-void test_executor_add_tests(mrt::test::TestFramework& testFramework) {
+extern "C" void setupTests(mrt::test::TestFramework& testFramework) {
   testFramework.addTest({"Test Executor", "Tests executor", []() -> mrt::test::Result {
     int i = 0;
 

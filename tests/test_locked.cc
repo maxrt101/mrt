@@ -4,7 +4,7 @@
 
 #include <thread>
 
-void test_locked_add_tests(mrt::test::TestFramework& testFramework) {
+extern "C" void setupTests(mrt::test::TestFramework& testFramework) {
   testFramework.addTest({"Test Locked", "Tests if mrt::Locked works correctly", []() -> mrt::test::Result {
 
     mrt::threads::Locked<int> resource(1);

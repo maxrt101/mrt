@@ -6,7 +6,7 @@
 #include <vector>
 #include <map>
 
-void test_container_utils_add_tests(mrt::test::TestFramework& testFramework) {
+extern "C" void setupTests(mrt::test::TestFramework& testFramework) {
   std::vector<int> vector {1, 10, 2, 9, 3, 8, 4, 7, 5, 6, 0};
 
   testFramework.addTest({"Test Container Utils - Filter 1", "Tests filtering of vector with x > 5", [vector]() -> mrt::test::Result {

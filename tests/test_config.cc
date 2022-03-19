@@ -3,7 +3,7 @@
 #include <mrt/test/check.h>
 #include <mrt/config.h>
 
-void test_config_add_tests(mrt::test::TestFramework& testFramework) {
+extern "C" void setupTests(mrt::test::TestFramework& testFramework) {
   testFramework.addTest({"Test Config", "Test Config Parser", []() -> mrt::test::Result {
     std::string configSource = "[main]\na = 3\n[test]\nb = 6\nc = 10\n#d = 8\n";
     auto config = mrt::Config::fromString(configSource);

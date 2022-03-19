@@ -5,7 +5,9 @@
 #include <thread>
 #include <utility>
 
-void test_pool_add_tests(mrt::test::TestFramework& testFramework) {
+using namespace  std::literals::chrono_literals;
+
+extern "C" void setupTests(mrt::test::TestFramework& testFramework) {
   testFramework.addTest({"Test Thread Pool", "Tests if all tasks ran succesfully", []() -> mrt::test::Result {
     mrt::threads::ThreadPool<mrt::threads::Task<int>> pool;
 

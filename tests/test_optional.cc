@@ -8,7 +8,7 @@ mrt::Optional<int> get_positive_int(int i) {
   return mrt::Optional<int>(i);
 }
 
-void test_optional_add_tests(mrt::test::TestFramework& testFramework) {
+extern "C" void setupTests(mrt::test::TestFramework& testFramework) {
   testFramework.addTest({"Test Optional", "Tests various optional methods", []() -> mrt::test::Result {
     auto opt_i = get_positive_int(10);
     

@@ -4,7 +4,7 @@
 
 #include <string>
 
-void test_args_add_tests(mrt::test::TestFramework& testFramework) {
+extern "C" void setupTests(mrt::test::TestFramework& testFramework) {
   testFramework.addTest({"Test Args - Flag", "Tests a flag presence", []() -> mrt::test::Result {
     const char* argv[] {"binary", "-v"};
 
