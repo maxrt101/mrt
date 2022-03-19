@@ -1,6 +1,8 @@
 #ifndef _MRT_MEMORY_H_
 #define _MRT_MEMORY_H_ 1
 
+#include <cstddef>
+
 namespace mrt {
 namespace mem {
 
