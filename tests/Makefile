@@ -33,8 +33,6 @@ build: prepare
 	$(info [+] Builing $(notdir $(TARGET)))
 	$(CXX) $(CXXFLAGS) main.cc -o $(TARGET)
 
-# $(CXX) $(LDFLAGS) -shared $(4) $(addprefix $(BUILD)/obj/$(3)/, $(1)) -o $(BUILD)/lib/$(2)
-
 prepare:
 	$(info [+] Creating folders)
 	mkdir -p $(PREFIX)/bin
