@@ -16,13 +16,17 @@ SRC      := test_args.cc \
             test_locked.cc \
             test_optional.cc \
             test_pool.cc
-TESTS     := $(addprefix $(BUILD)/test/, $(addsuffix .so, $(basename $(notdir $(SRC)))))
+TESTS     ?= $(addprefix $(BUILD)/test/, $(addsuffix .so, $(basename $(notdir $(SRC)))))
 
 .PHONY: test
 
 test: build
+ifeq ("$(RUN)","0")
+	$(info To run tests: './build/bin/mrt_test build/test/*.so')
+else
 	$(info [+] Running $(notdir $(TARGET)))
 	$(TARGET) $(TESTS)
+endif
 
 build: prepare
 	for file in $(SRC); do \
