@@ -83,10 +83,10 @@ class Config {
   inline void toFile(const std::string& fileName) const {
     std::ofstream file(fileName);
     if (!file) {
-      #ifndef MRT_CONFIG_NO_ERROR_REPORT
+      #ifndef MRT_NO_ERROR_LOG
         fatal("Can't open file '%s'", fileName.c_str());
       #endif
-      #ifndef MRT_CONFIG_NO_THROW
+      #ifndef MRT_NO_THROW
         throw "Can't open file";
       #else
         return;
@@ -98,10 +98,10 @@ class Config {
   inline static Config fromFile(const std::string& fileName) {
     std::ifstream file(fileName);
     if (!file) {
-      #ifndef MRT_CONFIG_NO_ERROR_REPORT
+      #ifndef MRT_NO_ERROR_LOG
         fatal("Can't open file '%s'", fileName.c_str());
       #endif
-      #ifndef MRT_CONFIG_NO_THROW
+      #ifndef MRT_NO_THROW
         throw "Can't open file";
       #else
         return;
@@ -126,10 +126,10 @@ class Config {
         if (line.back() == ']') {
           currentSection = line.substr(1, line.size()-2);
         } else {
-          #ifndef MRT_CONFIG_NO_ERROR_REPORT
+          #ifndef MRT_NO_ERROR_LOG
             fatal("Config Parsing Error:\n    Near '%s' (line %d)\n    Expected ']' at the end of section name", line.c_str(), lineNumber);
           #endif
-          #ifndef MRT_CONFIG_NO_THROW
+          #ifndef MRT_NO_THROW
             throw "Parsing Error: Expected ']' at the end of section name";
           #else
             return;
@@ -141,10 +141,10 @@ class Config {
           std::string key = line.substr(0, i), value = line.substr(i+3);
           config.setValue(currentSection, key, value);
         } else {
-          #ifndef MRT_CONFIG_NO_ERROR_REPORT
+          #ifndef MRT_NO_ERROR_LOG
             fatal("Config Parsing Error:\n    Near '%s' (line %d)\n    Expected key-value pair", line.c_str(), lineNumber);
           #endif
-          #ifndef MRT_CONFIG_NO_THROW
+          #ifndef MRT_NO_THROW
             throw "Parsing Error: Expected key-value pair";
           #else
             return;
