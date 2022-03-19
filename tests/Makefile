@@ -35,8 +35,8 @@ build: prepare
 
 prepare:
 	$(info [+] Creating folders)
-	mkdir -p $(PREFIX)/bin
-	mkdir -p $(PREFIX)/obj
-	mkdir -p $(PREFIX)/test
+	mkdir -p $(BUILD)/bin
+	mkdir -p $(BUILD)/obj
+	mkdir -p $(BUILD)/test
 
 $(V).SILENT:
