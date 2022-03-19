@@ -22,16 +22,18 @@ enum OptionType {
   POSITIONAL,
 };
 
+/* Represents command line option */
 struct Option {
   std::string name;
   OptionType type;
   std::vector<std::string> options;
   std::string helpString;
-  bool many = false; // for POSITIONAL type
+  bool many = false; // For POSITIONAL type
 
   inline Option(const std::string& name, OptionType type,
-         const std::vector<std::string>& options,
-         const std::string& helpString, bool many = false) 
+                const std::vector<std::string>& options,
+                const std::string& helpString,
+                bool many = false)
     : name(name), type(type), options(options), helpString(helpString), many(many) {}
 };
 
@@ -111,8 +113,13 @@ class Parser {
 
   inline ParserResult parse(int argc, const char ** argv) {
     ParserResult result;
+
+    bool hasHelpOption = std::find_if(m_options.begin(), m_options.end(), [](auto& option) {
+      return option.name == "help";
+    }) != m_options.end();
+
     for (int i = 1; i < argc; ++i) {
-      if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")) {
+      if ((!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")) && !hasHelpOption) {
         std::cout << m_helpString << std::endl
                   << "Usage: " << argv[0] << " [OPTIONS] ";
         for (auto& opt : m_positional) {
