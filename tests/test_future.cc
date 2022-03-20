@@ -11,9 +11,9 @@ extern "C" void setupTests(mrt::test::TestFramework& testFramework) {
   testFramework.addTest({"Test Future Get", "Tests mrt::future::get method", []() -> mrt::test::Result {
     bool result = true;
 
-    mrt::threads::Future<int> f;
+    mrt::Future<int> f;
 
-    mrt::threads::Executor().run([&f](){
+    mrt::Executor().run([&f](){
       std::this_thread::sleep_for(1s);
       f.set(100);
     });
@@ -28,11 +28,11 @@ extern "C" void setupTests(mrt::test::TestFramework& testFramework) {
   testFramework.addTest({"Test Future Callback", "Tests mrt::future::onReady", []() -> mrt::test::Result {
     bool result = true;
 
-    mrt::threads::Future<int> f;
+    mrt::Future<int> f;
 
     f.onReady([&result](auto value) { result &= (value == 100); });
 
-    mrt::threads::Executor().run([&f](){
+    mrt::Executor().run([&f](){
       std::this_thread::sleep_for(1s);
       f.set(100);
     });

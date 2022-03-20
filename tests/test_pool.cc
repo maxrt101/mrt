@@ -9,7 +9,7 @@ using namespace  std::literals::chrono_literals;
 
 extern "C" void setupTests(mrt::test::TestFramework& testFramework) {
   testFramework.addTest({"Test Thread Pool", "Tests if all tasks ran succesfully", []() -> mrt::test::Result {
-    mrt::threads::ThreadPool<mrt::threads::Task<int>> pool;
+    mrt::ThreadPool<mrt::Task<int>> pool;
 
     int sum = 0;
 

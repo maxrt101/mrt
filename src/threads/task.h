@@ -4,7 +4,6 @@
 #include <functional>
 
 namespace mrt {
-namespace threads {
 
 /* Encapsulates function pointer and argument to pass to it */
 template <class T = void*>
@@ -24,7 +23,6 @@ class Task {
   }
 };
 
-} // namespace threads
 } // namespace mrt
 
 #endif

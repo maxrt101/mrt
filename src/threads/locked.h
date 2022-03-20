@@ -6,7 +6,6 @@
 #include <functional>
 
 namespace mrt {
-namespace threads {
 
 template <typename T>
 class Locked {
@@ -50,7 +49,6 @@ class Locked {
   }
 };
 
-} /* namespace threads */
 } /* namespace mrt */
 
 #endif

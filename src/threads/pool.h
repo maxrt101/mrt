@@ -9,7 +9,6 @@
 #include <condition_variable>
 
 namespace mrt {
-namespace threads {
 
 /* ThreadPool class
  * T - task class. Required to have operator()
@@ -92,7 +91,6 @@ class ThreadPool {
   int m_threadsNum = std::thread::hardware_concurrency();
 };
 
-} // namespace threads
 } // namespace mrt
 
 #endif

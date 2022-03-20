@@ -11,7 +11,7 @@ extern "C" void setupTests(mrt::test::TestFramework& testFramework) {
   testFramework.addTest({"Test Executor", "Tests executor", []() -> mrt::test::Result {
     int i = 0;
 
-    mrt::threads::Executor().run([&i](){
+    mrt::Executor().run([&i](){
       std::this_thread::sleep_for(1s);
       i = 1;
     });
@@ -23,7 +23,7 @@ extern "C" void setupTests(mrt::test::TestFramework& testFramework) {
   testFramework.addTest({"Test Delayed Executor", "Tests delayed execution", []() -> mrt::test::Result {
     int i = 0;
 
-    mrt::threads::DelayedExecutor().run(1, [&i](){
+    mrt::DelayedExecutor().run(1, [&i](){
       i = 1;
     });
 
@@ -34,7 +34,7 @@ extern "C" void setupTests(mrt::test::TestFramework& testFramework) {
   testFramework.addTest({"Test Interval Executor", "Tests interval execution", []() -> mrt::test::Result {
     int i = 0;
 
-    mrt::threads::IntervalExecutor e;
+    mrt::IntervalExecutor e;
 
     e.run(1, [&i](){
       i++;

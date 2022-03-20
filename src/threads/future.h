@@ -10,7 +10,6 @@
 #include <mrt/threads/executor.h>
 
 namespace mrt {
-namespace threads {
 
 template <class T>
 class Future {
@@ -61,7 +60,6 @@ class Future {
   std::vector<Callback> m_callbacks;
 };
 
-} /* namespace threads */
 } /* namespace mrt */
 
 #endif

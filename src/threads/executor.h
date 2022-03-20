@@ -7,7 +7,6 @@
 #include <functional>
 
 namespace mrt {
-namespace threads {
 
 /* Runs task in a thread */
 class Executor {
@@ -29,6 +28,20 @@ class Executor {
   inline Executor(Deleter deleter = DefaultDeleter)
     : m_deleter(deleter), m_isRunning(false) {}
 
+  inline Executor(Executor&& rhs) {
+    m_thread = std::move(rhs.m_thread);
+    m_isRunning.store(rhs.m_isRunning.load());
+    m_deleter = rhs.m_deleter;
+    rhs.m_isRunning.store(false);
+  }
+
+  void operator==(Executor&& rhs) {
+    m_thread = std::move(rhs.m_thread);
+    m_isRunning.store(rhs.m_isRunning.load());
+    m_deleter = rhs.m_deleter;
+    rhs.m_isRunning.store(false);
+  }
+
   /* If the executior is running, calls a deleter */
   inline virtual ~Executor() {
     if (m_isRunning.load()) {
@@ -38,7 +51,7 @@ class Executor {
   
   /* Main executor function, runs threadFunction with args */
   template <class ThreadFunction, class ... Args>
-  inline Executor& run(ThreadFunction&& threadFunction, Args&&... args) {
+  inline Executor& run(ThreadFunction&& threadFunction, Args... args) {
     if (m_isRunning.load()) {
       stop();
     }
@@ -51,14 +64,14 @@ class Executor {
 
   /* Calls join */
   inline void stop() {
-    m_isRunning.store(false);
     join();
   }
 
   /* Joins the thread */
   inline void join() {
-    if (m_thread.joinable()) {
+    if (m_isRunning.load() && m_thread.joinable()) {
       m_thread.join();
+      m_isRunning.store(false);
     }
   }
 
@@ -88,7 +101,7 @@ class DelayedExecutor : public Executor {
   template <class Duration = std::chrono::seconds,
             class ThreadFunction,
             class ... Args>
-  inline DelayedExecutor& run(int delay, ThreadFunction&& threadFunction, Args&&... args) {
+  inline DelayedExecutor& run(int delay, ThreadFunction&& threadFunction, Args... args) {
     Executor::run(
       [delay, threadFunction](Args&&... args) {
         std::this_thread::sleep_for(Duration(delay));
@@ -109,7 +122,7 @@ class IntervalExecutor : public Executor {
   template <class Duration = std::chrono::seconds,
             class ThreadFunction,
             class ... Args>
-  inline IntervalExecutor& run(int interval, ThreadFunction&& threadFunction, Args&&... args) {
+  inline IntervalExecutor& run(int interval, ThreadFunction&& threadFunction, Args... args) {
     Executor::run(
       [this, interval, threadFunction](Args&&... args) {
         while (this->isRunning()) {
@@ -122,7 +135,6 @@ class IntervalExecutor : public Executor {
   }
 };
 
-} /* namespace threads */
 } /* namespace mrt */
 
 #endif
