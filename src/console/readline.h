@@ -26,6 +26,7 @@ inline std::string readLine(const std::string& prompt, std::vector<std::string>&
         if (hIndex >= 0) {
           printf("\r%s%s", prompt.c_str(), history[--hIndex].c_str());
           sIndex = history[hIndex].size();
+          moveCursorInLine(prompt.size() + sIndex + 1);
         } else {
           putchar(BELL);
         }
@@ -35,12 +36,17 @@ inline std::string readLine(const std::string& prompt, std::vector<std::string>&
         if (hIndex < history.size()) {
           printf("\r%s%s", prompt.c_str(), history[--hIndex].c_str());
           sIndex = history[hIndex].size();
+          moveCursorInLine(prompt.size() + sIndex + 1);
         } else {
           putchar(BELL);
         }
         break;
       }
       case LEFT_ARROW: {
+        if (hIndex != history.size()-1) {
+          history[history.size()-1] = history[hIndex];
+          hIndex = history.size()-1;
+        }
         // if (ch.flags & CTRL) {}
         if (sIndex > 0) {
           sIndex--;
@@ -51,6 +57,10 @@ inline std::string readLine(const std::string& prompt, std::vector<std::string>&
         break;
       }
       case RIGHT_ARROW: {
+        if (hIndex != history.size()-1) {
+          history[history.size()-1] = history[hIndex];
+          hIndex = history.size()-1;
+        }
         // if (ch.flags & CTRL) {}
         if (sIndex < history[hIndex].size()) {
           sIndex++;
@@ -62,6 +72,10 @@ inline std::string readLine(const std::string& prompt, std::vector<std::string>&
       }
       case '\b':
       case DEL: {
+        if (hIndex != history.size()-1) {
+          history[history.size()-1] = history[hIndex];
+          hIndex = history.size()-1;
+        }
         if (sIndex == 0) {
           putchar(BELL);
         } else {
@@ -73,10 +87,15 @@ inline std::string readLine(const std::string& prompt, std::vector<std::string>&
         break;
       }
       case '\n': {
+        moveCursorInLine(history[hIndex].size());
         putchar('\n');
         goto end;
       }
       default: {
+        if (hIndex != history.size()-1) {
+          history[history.size()-1] = history[hIndex];
+          hIndex = history.size()-1;
+        }
         history[hIndex].insert(history[hIndex].begin() + sIndex++, ch.code);
         printf("\r%s%s", prompt.c_str(), history[hIndex].c_str());
       }
