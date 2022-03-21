@@ -45,17 +45,17 @@ inline LogLevel stringToLogLevel(const std::string& s) {
 
 inline void vflogf(FILE* dest, LogLevel level, const std::string& format, va_list args) {
   switch (level) {
-    case LogLevel::FATAL:   fprintf(dest, "%sFATAL",   mrt::console::RED_RED); break;
-    case LogLevel::ERROR:   fprintf(dest, "%sERROR",   mrt::console::RED);     break;
-    case LogLevel::WARNING: fprintf(dest, "%sWARNING", mrt::console::YELLOW);  break;
-    case LogLevel::INFO:    fprintf(dest, "%sINFO",    mrt::console::CYAN);    break;
-    case LogLevel::DEBUG:   fprintf(dest, "%sDEBUG",   mrt::console::BLUE);    break;
-    default:                fprintf(dest, "INVALID_LOG_LEVEL");                break;
+    case LogLevel::FATAL:   ::fprintf(dest, "%sFATAL",   mrt::console::RED_RED); break;
+    case LogLevel::ERROR:   ::fprintf(dest, "%sERROR",   mrt::console::RED);     break;
+    case LogLevel::WARNING: ::fprintf(dest, "%sWARNING", mrt::console::YELLOW);  break;
+    case LogLevel::INFO:    ::fprintf(dest, "%sINFO",    mrt::console::CYAN);    break;
+    case LogLevel::DEBUG:   ::fprintf(dest, "%sDEBUG",   mrt::console::BLUE);    break;
+    default:                ::fprintf(dest, "INVALID_LOG_LEVEL");                break;
   }
 
-  fprintf(dest, "\033[0m: ");
-  vfprintf(dest, format.c_str(), args);
-  fprintf(dest, "\n");
+  ::fprintf(dest, "\033[0m: ");
+  ::vfprintf(dest, format.c_str(), args);
+  ::fprintf(dest, "\n");
 }
 
 inline void vlogf(LogLevel level, const std::string& format, va_list args) {
