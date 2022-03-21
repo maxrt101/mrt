@@ -38,7 +38,6 @@ class File {
   std::string m_filename;
   FILE* m_file = nullptr;
   bool m_close = true;
-  size_t m_size = 0;
 
  public:
   inline File() {}
@@ -73,9 +72,6 @@ class File {
     if (!m_file) {
       throw FileNotExistsError(filename);
     }
-    fseek(m_file, 0, SEEK_END);
-    m_size = ftell(m_file);
-    rewind(m_file);
   }
 
   inline void close() {
@@ -84,10 +80,12 @@ class File {
       m_file = nullptr;
     }
     m_filename = "";
-    m_size = 0;
   }
 
-  inline size_t size() const {
+  inline size_t countSize() const {
+    fseek(m_file, 0, SEEK_END);
+    size_t m_size = ftell(m_file);
+    rewind(m_file);
     return m_size;
   }
 
@@ -99,47 +97,37 @@ class File {
     return m_file;
   }
 
-  inline char* read(size_t size = 0) {
-    size = size ? size : this->size();
-    char* buffer = new char[size];
-    fread(buffer, 1, size, m_file);
-    buffer[size-1] = 0;
-    return buffer;
-  }
-
-  inline std::string readString(size_t size = 0) {
-    size = size ? size : this->size();
-    char* cstr = this->read(size);
-    std::string str = cstr;
-    delete [] cstr;
+  inline std::string read(size_t size = 0) {
+    std::string str;
+    if (size > 0) {
+      char* buffer = new char[size];
+      fread(buffer, 1, size, m_file);
+      buffer[size-1] = 0;
+      str += buffer;
+      delete [] buffer;
+    } else {
+      int c;
+      while ((c = fgetc(m_file)) != EOF) {
+        str += c;
+      }
+    }
     return str;
   }
 
   inline bool readLine(std::string& res) {
-    size_t bufferSize = kBufferSize;
-    char* buffer = new char[bufferSize];
-    size_t size = 0;
+    std::string result;
     int ch = 0;
-    do {
-      if (size >= bufferSize) {
-        bufferSize *= 2;
-        buffer = mem::realloc(buffer, bufferSize/2, bufferSize);
-      }
+    while (ch != EOF && ch != '\n') {
       ch = fgetc(m_file);
-      buffer[size++] = ch;
-    } while (ch != EOF && ch != '\n');
-    if (ch == EOF) {
-      delete [] buffer;
-      return false;
+      result += ch;
     }
-    buffer[size-1] = '\0';
-    res = std::string(buffer);
-    delete [] buffer;
-    return true;
+    result.pop_back();
+    res = result;
+    return !(ch == EOF && result.size() == 0);
   }
 
   inline std::vector<std::string> readLines() {
-    std::string buffer = this->readString();
+    std::string buffer = this->read();
     return str::split(buffer, "\n");
   }
 
