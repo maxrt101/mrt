@@ -24,6 +24,7 @@ inline std::string readLine(const std::string& prompt, std::vector<std::string>&
     switch (ch.code) {
       case UP_ARROW: {
         if (hIndex >= 0) {
+          clearLine();
           printf("\r%s%s", prompt.c_str(), history[--hIndex].c_str());
           sIndex = history[hIndex].size();
           moveCursorInLine(prompt.size() + sIndex + 1);
@@ -34,6 +35,7 @@ inline std::string readLine(const std::string& prompt, std::vector<std::string>&
       }
       case DOWN_ARROW: {
         if (hIndex < history.size()) {
+          clearLine();
           printf("\r%s%s", prompt.c_str(), history[--hIndex].c_str());
           sIndex = history[hIndex].size();
           moveCursorInLine(prompt.size() + sIndex + 1);
