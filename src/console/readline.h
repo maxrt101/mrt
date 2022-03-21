@@ -98,6 +98,7 @@ inline std::string readLine(const std::string& prompt, std::vector<std::string>&
         }
         history[hIndex].insert(history[hIndex].begin() + sIndex++, ch.code);
         printf("\r%s%s", prompt.c_str(), history[hIndex].c_str());
+        moveCursorInLine(prompt.size() + sIndex + 1);
       }
     }
   }
