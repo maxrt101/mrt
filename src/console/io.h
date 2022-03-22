@@ -148,6 +148,15 @@ inline Character getChar() {
   int ch = 0;
   ch = getchar();
   if (ch == ESC) {
+    // FIXME: Doesn't work for some reason, for ESC to be returned, it must be pressed twice
+    // Check if there is actually an escape sequence
+    /*pollfd fd = {.fd = STDIN_FILENO, .events = POLLIN};
+    int ret = poll(&fd, 1, 0);
+    if (!ret || !(fd.revents & POLLIN)) {
+      printf("\n%x %x %x\n", ret, fd.revents, fd.revents & POLLIN);
+      return {ch};
+    }*/
+
     ch = getchar();
     if (ch == '[') {
       ch = getchar();
