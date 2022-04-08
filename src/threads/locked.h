@@ -47,6 +47,27 @@ class Locked {
       cb(m_data);
     }
   }
+
+  /* Perform an operation with resource locked */
+  void withLocked(Updater f) {
+    std::unique_lock<std::mutex> lock(m_mutex);
+    f(m_data);
+  }
+
+  /* Locks underlying mutex */
+  void lock() {
+    m_mutex.lock();
+  }
+
+  /* Unlocks underlying mutex */
+  void unlock() {
+    m_mutex.unlock();
+  }
+
+  /* Creates a unique lock */
+  std::unique_lock<std::mutex> createLock() {
+    return std::move( std::unique_lock<std::mutex>(m_mutex));
+  }
 };
 
 } /* namespace mrt */
