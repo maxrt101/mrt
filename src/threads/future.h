@@ -38,7 +38,20 @@ class Future {
   }
 
   /* Sets the future's value, calls all onReady callbacks */
-  inline void set(T& value) {
+  inline void set(const T& value) {
+    {
+      std::unique_lock<std::mutex> lock(m_value_mutex);
+      m_value = value;
+      m_is_ready.store(true);
+    }
+    m_cv.notify_all();
+    std::unique_lock<std::mutex> lock(m_callback_mutex);
+    for (auto& cb : m_callbacks) {
+      cb(m_value);
+    }
+  }
+
+  inline void set(T&& value) {
     {
       std::unique_lock<std::mutex> lock(m_value_mutex);
       m_value = std::move(value);

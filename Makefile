@@ -4,6 +4,11 @@ export TOPDIR     := $(shell pwd)
 export PREFIX     ?= $(TOPDIR)/build
 export BUILD      := $(TOPDIR)/build
 export INCLUDEDIR := $(PREFIX)/include/mrt
+export SHELL      := /bin/bash -e
+
+ifneq ($(DEBUG),)
+export SHELL := /bin/bash -xe
+endif
 
 .PHONY: build
 
@@ -33,6 +38,7 @@ prepare:
 
 test:
 	$(info [+] Running tests)
-	make -C tests
+	make -C tests SHELL="$(SHELL)" V="$(V)"
 
 $(V).SILENT:
+

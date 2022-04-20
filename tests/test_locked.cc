@@ -18,8 +18,20 @@ extern "C" void setupTests(mrt::test::TestFramework& testFramework) {
       MRT_ASSERT_TRUE(value == 100, "mrt::Locked::onUpdate doesn't work");
     });
 
-    resource.update([](int& value) {value = 100;});
+    resource.update([](int& value) {
+      value = 100;
+    });
     MRT_ASSERT_TRUE(resource.get() == 100, "mrt::Locked::update doesn't work");
+
+    resource.withLocked([](int& value) {
+      value = 120;
+    });
+    MRT_ASSERT_TRUE(resource.get() == 120, "mrt::Locked::withLocked doesn't work");
+
+    /*
+      TODO create 2 threads that will try to change the value at the same time
+      and test withLocked, lock, unlock, createLock
+    */
 
     return {};
   }});

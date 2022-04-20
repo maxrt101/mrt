@@ -70,8 +70,8 @@ class Executor {
   /* Joins the thread */
   inline void join() {
     if (m_isRunning.load() && m_thread.joinable()) {
-      m_thread.join();
       m_isRunning.store(false);
+      m_thread.join();
     }
   }
 

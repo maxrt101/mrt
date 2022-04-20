@@ -76,7 +76,7 @@ inline C filter(const C& container, F&& predicate) {
  * Template parameters:
  *  T - Return type
  *  C - Container
- *  F - Reducer of type T(T, T)
+ *  F - Reducer of type T(T, C::value_type)
  */
 template <typename T, typename C, typename F>
 inline T reduce(const C& container, F&& reducer, T start = T{}) {
@@ -91,7 +91,7 @@ inline T reduce(const C& container, F&& reducer, T start = T{}) {
  * Template parameters:
  *  T - Return type
  *  C - Container
- *  F - Reducer of type T(T, T)
+ *  F - Reducer of type T(T, C::value_type)
  */
 template <typename T, typename C, typename F>
 inline T foldLeft(const C& container, F&& reducer, T start = T{}) {
@@ -106,7 +106,7 @@ inline T foldLeft(const C& container, F&& reducer, T start = T{}) {
  * Template parameters:
  *  T - Return type
  *  C - Container
- *  F - Reducer of type T(T, T)
+ *  F - Reducer of type T(T, C::value_type)
  */
 template <typename T, typename C, typename F>
 inline T foldRight(const C& container, F&& reducer, T start = T{}) {
