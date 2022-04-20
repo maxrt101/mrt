@@ -63,8 +63,7 @@ class Process {
     );
   }
 
-  // FIXME: name clashes with execute(cmd, input)
-  static inline int execute(const std::string& cmd, std::string& output) {
+  static inline int executeGetOutput(const std::string& cmd, std::string& output) {
     FILE* out = popen(cmd.c_str(), "r");
     if (!out) {
       return -1;

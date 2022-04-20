@@ -66,7 +66,7 @@ class Locked {
 
   /* Creates a unique lock */
   std::unique_lock<std::mutex> createLock() {
-    return std::move( std::unique_lock<std::mutex>(m_mutex));
+    return std::move(std::unique_lock<std::mutex>(m_mutex));
   }
 };
 
