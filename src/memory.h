@@ -2,6 +2,7 @@
 #define _MRT_MEMORY_H_ 1
 
 #include <cstddef>
+#include <utility>
 
 namespace mrt {
 namespace mem {
