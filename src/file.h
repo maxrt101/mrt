@@ -18,7 +18,7 @@ class FileNotExistsError : public std::exception {
   std::string m_file;
 
  public:
-  inline FileNotExistsError(const std::string& file) : m_file(file) {}
+  inline explicit FileNotExistsError(const std::string& file) : m_file(file) {}
 
   inline std::string getFile() const {
     return m_file;
