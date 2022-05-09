@@ -15,7 +15,7 @@ class DynamicLibrary {
   inline DynamicLibrary() = default;
   inline DynamicLibrary(const DynamicLibrary& rhs) = delete;
 
-  inline DynamicLibrary(const std::string& filename) {
+  inline explicit DynamicLibrary(const std::string& filename) {
     open(filename);
   }
 
